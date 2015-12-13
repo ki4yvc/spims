@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ApparatusItemsCreateDlg" widgetVar="ApparatusItemsCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateApparatusItemsTitle}">
+            <h:form id="ApparatusItemsCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{apparatusItemsController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateApparatusItemsLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{apparatusItemsController.selected.id}" title="#{bundle.CreateApparatusItemsTitle_id}" required="true" requiredMessage="#{bundle.CreateApparatusItemsRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateApparatusItemsLabel_itemId}" for="itemId" />
+                        <p:inputText id="itemId" value="#{apparatusItemsController.selected.itemId}" title="#{bundle.CreateApparatusItemsTitle_itemId}" />
+                        <p:outputLabel value="#{bundle.CreateApparatusItemsLabel_apparatusId}" for="apparatusId" />
+                        <p:inputText id="apparatusId" value="#{apparatusItemsController.selected.apparatusId}" title="#{bundle.CreateApparatusItemsTitle_apparatusId}" />
+                        <p:outputLabel value="#{bundle.CreateApparatusItemsLabel_quantity}" for="quantity" />
+                        <p:inputText id="quantity" value="#{apparatusItemsController.selected.quantity}" title="#{bundle.CreateApparatusItemsTitle_quantity}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{apparatusItemsController.create}" value="#{bundle.Save}" update="display,:ApparatusItemsListForm:datalist,:growl" oncomplete="handleSubmit(args,'ApparatusItemsCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="ApparatusItemsCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

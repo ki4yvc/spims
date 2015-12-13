@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="PersonEquipmentAssignmentEditDlg" widgetVar="PersonEquipmentAssignmentEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditPersonEquipmentAssignmentTitle}">
+            <h:form id="PersonEquipmentAssignmentEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{personEquipmentAssignmentController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditPersonEquipmentAssignmentLabel_barcode}" for="barcode" />
+                        <p:inputText id="barcode" value="#{personEquipmentAssignmentController.selected.barcode}" title="#{bundle.EditPersonEquipmentAssignmentTitle_barcode}" required="true" requiredMessage="#{bundle.EditPersonEquipmentAssignmentRequiredMessage_barcode}"/>
+                        <p:outputLabel value="#{bundle.EditPersonEquipmentAssignmentLabel_radioId}" for="radioId" />
+                        <p:inputText id="radioId" value="#{personEquipmentAssignmentController.selected.radioId}" title="#{bundle.EditPersonEquipmentAssignmentTitle_radioId}" />
+                        <p:outputLabel value="#{bundle.EditPersonEquipmentAssignmentLabel_equipmentId}" for="equipmentId" />
+                        <p:inputText id="equipmentId" value="#{personEquipmentAssignmentController.selected.equipmentId}" title="#{bundle.EditPersonEquipmentAssignmentTitle_equipmentId}" />
+                        <p:outputLabel value="#{bundle.EditPersonEquipmentAssignmentLabel_dateIssued}" for="dateIssued" />
+                        <p:inputText id="dateIssued" value="#{personEquipmentAssignmentController.selected.dateIssued}" title="#{bundle.EditPersonEquipmentAssignmentTitle_dateIssued}" />
+                        <p:outputLabel value="#{bundle.EditPersonEquipmentAssignmentLabel_dateReturned}" for="dateReturned" />
+                        <p:inputText id="dateReturned" value="#{personEquipmentAssignmentController.selected.dateReturned}" title="#{bundle.EditPersonEquipmentAssignmentTitle_dateReturned}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{personEquipmentAssignmentController.update}" value="#{bundle.Save}" update="display,:PersonEquipmentAssignmentListForm:datalist,:growl" oncomplete="handleSubmit(args, 'PersonEquipmentAssignmentEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="PersonEquipmentAssignmentEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

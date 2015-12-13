@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ApparatusEquipmentAssignmentCreateDlg" widgetVar="ApparatusEquipmentAssignmentCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateApparatusEquipmentAssignmentTitle}">
+            <h:form id="ApparatusEquipmentAssignmentCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{apparatusEquipmentAssignmentController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateApparatusEquipmentAssignmentLabel_barcode}" for="barcode" />
+                        <p:inputText id="barcode" value="#{apparatusEquipmentAssignmentController.selected.barcode}" title="#{bundle.CreateApparatusEquipmentAssignmentTitle_barcode}" required="true" requiredMessage="#{bundle.CreateApparatusEquipmentAssignmentRequiredMessage_barcode}"/>
+                        <p:outputLabel value="#{bundle.CreateApparatusEquipmentAssignmentLabel_apparatusId}" for="apparatusId" />
+                        <p:inputText id="apparatusId" value="#{apparatusEquipmentAssignmentController.selected.apparatusId}" title="#{bundle.CreateApparatusEquipmentAssignmentTitle_apparatusId}" />
+                        <p:outputLabel value="#{bundle.CreateApparatusEquipmentAssignmentLabel_equipmentId}" for="equipmentId" />
+                        <p:inputText id="equipmentId" value="#{apparatusEquipmentAssignmentController.selected.equipmentId}" title="#{bundle.CreateApparatusEquipmentAssignmentTitle_equipmentId}" />
+                        <p:outputLabel value="#{bundle.CreateApparatusEquipmentAssignmentLabel_issueDate}" for="issueDate" />
+                        <p:inputText id="issueDate" value="#{apparatusEquipmentAssignmentController.selected.issueDate}" title="#{bundle.CreateApparatusEquipmentAssignmentTitle_issueDate}" />
+                        <p:outputLabel value="#{bundle.CreateApparatusEquipmentAssignmentLabel_returnData}" for="returnData" />
+                        <p:inputText id="returnData" value="#{apparatusEquipmentAssignmentController.selected.returnData}" title="#{bundle.CreateApparatusEquipmentAssignmentTitle_returnData}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{apparatusEquipmentAssignmentController.create}" value="#{bundle.Save}" update="display,:ApparatusEquipmentAssignmentListForm:datalist,:growl" oncomplete="handleSubmit(args,'ApparatusEquipmentAssignmentCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="ApparatusEquipmentAssignmentCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

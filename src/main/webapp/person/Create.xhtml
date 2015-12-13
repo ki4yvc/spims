@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="PersonCreateDlg" widgetVar="PersonCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreatePersonTitle}">
+            <h:form id="PersonCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{personController.selected != null}">
+                        <p:outputLabel value="Radio ID" for="radioId" />
+                        <p:inputText id="radioId" value="#{personController.selected.radioId}" title= "Radio ID:" required="true" requiredMessage="#{bundle.CreatePersonRequiredMessage_radioId}"/>
+                        <p:outputLabel value="First Name" for="firstName" />
+                        <p:inputText id="firstName" value="#{personController.selected.firstName}" title="First Name:" required="true" requiredMessage="First Name is Required" />
+                        <p:outputLabel value="Last Name" for="lastName" />
+                        <p:inputText id="lastName" value="#{personController.selected.lastName}" title="Last Name:" required="true" requiredMessage="Last Name is Required" />
+                        <p:outputLabel value="Middle Initial" for="middleInitial" />
+                        <p:inputText id="middleInitial" value="#{personController.selected.middleInitial}" title="Middle Initial" />
+                        <p:outputLabel value="Street Line 1" for="streetLineOne" />
+                        <p:inputText id="streetLineOne" value="#{personController.selected.streetLineOne}" title="Steet Line 1:" required="true" requiredMessage="Street Address Required"/>
+                        <p:outputLabel value="Street Line 2" for="streetLineTwo" />
+                        <p:inputText id="streetLineTwo" value="#{personController.selected.streetLineTwo}" title="Street Line 2:" />
+                        <p:outputLabel value="#{bundle.CreatePersonLabel_city}" for="city" />
+                        <p:inputText id="city" value="#{personController.selected.city}" title="#{bundle.CreatePersonTitle_city}" required="true" requiredMessage="City Required"/>
+                        <p:outputLabel value="#{bundle.CreatePersonLabel_state}" for="state" />
+                        <p:inputText id="state" value="#{personController.selected.state}" title="#{bundle.CreatePersonTitle_state}" required="true" requiredMessage="State Required" />
+                        <p:outputLabel value="#{bundle.CreatePersonLabel_zip}" for="zip" />
+                        <p:inputText id="zip" value="#{personController.selected.zip}" title="#{bundle.CreatePersonTitle_zip}" required="true" requiredMessage="Zip Required"/>
+                        <p:outputLabel value="#{bundle.CreatePersonLabel_phone}" for="phone" />
+                        <p:inputText id="phone" value="#{personController.selected.phone}" title="#{bundle.CreatePersonTitle_phone}" />
+                        <p:outputLabel value="#{bundle.CreatePersonLabel_email}" for="email" />
+                        <p:inputText id="email" value="#{personController.selected.email}" title="#{bundle.CreatePersonTitle_email}" />
+                        <p:outputLabel value="#{bundle.CreatePersonLabel_role}" for="role" />
+                        <p:inputText id="role" value="#{personController.selected.role}" title="#{bundle.CreatePersonTitle_role}" required="true" requiredMessage="Role Required"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{personController.create}" value="#{bundle.Save}" update="display,:PersonListForm:datalist,:growl" oncomplete="handleSubmit(args,'PersonCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="PersonCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>
