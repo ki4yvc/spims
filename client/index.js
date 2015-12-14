@@ -22,7 +22,7 @@ function setElements() {
 }
 
 function logIn(userID, userPassword) {
-	// Do XHR here using POST to see if userID and userPassword match
+	// Do XHR here to see if userID and userPassword match
 	// The rest of this concept assumes that it does
 	this.userID = userID;
 	this.userPassword = userPassword;
@@ -42,7 +42,7 @@ function setUp() {
 	currentUser.className = currentUser.className + " " + userPosition;
 	currentUser.innerHTML = userName;
 	currentUser.title = "User is " + userPosition;
-	
+
 	addEventListeners();
 }
 
