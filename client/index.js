@@ -63,3 +63,7 @@ function toggleClass(element, className) {
 		element.className += " " + className;
 	}
 }
+
+function search() {
+	return false;
+}
