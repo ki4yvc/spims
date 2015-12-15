@@ -5,7 +5,10 @@ body {
 }
 
 .no-select {
+	-ms-user-select: none;
+	-moz-user-select: none;
 	-webkit-user-select: none;
+	user-select: none;
 }
 
 /* Header */
@@ -61,11 +64,11 @@ body {
 		}
 
 		#account-menu hr {
-			all: initial;
 			margin: 0px 8px;
 			width: calc(100% - 16px);
 			height: 1px;
 			display: block;
+			border: none;
 			background-color: #003f66;
 		}
 
