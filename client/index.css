@@ -77,7 +77,6 @@ body {
 		#log-out-button:hover {
 			background-color: #bf0000;
 			transition: 0.5s;
-			float: top;
 		}
 
 /* Toolbar */
