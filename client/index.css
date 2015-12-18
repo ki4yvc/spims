@@ -159,13 +159,26 @@ body {
 			cursor: pointer;
 		}
 
+		#people-table thead td::after {
+			content: " \f0d7";
+			color: rgba(0, 0, 0, 0);
+			font-family: FontAwesome;
+		}
+
+		#people-table thead td:hover::after {
+			color: rgba(0, 0, 0, 0.2);
+		}
+
 		#people-table thead td.sorting-by {
 			font-weight: bold;
 		}
 
 		#people-table thead td.sorting-by::after {
-			font-family: FontAwesome;
-			content: " \f0d7";
+			color: black;
+		}
+
+		#people-table tr:hover {
+			cursor: pointer;
 		}
 
 		#people-table tbody td {
