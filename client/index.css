@@ -113,6 +113,7 @@ body {
 	}
 
 	#toolbar-search-form input[type="text"]:focus {
+		background-color: white;
 		outline: none;
 	}
 
@@ -135,10 +136,40 @@ body {
 
 /* Content */
 	#content {
-		padding: 50px 48px 256px;
+		padding: 100px 48px 256px;
+		font-size: 14px;
 	}
 
 	/* People */
 		#people-table {
+			width: 100%;
+			border-collapse: collapse;
+		}
 
+		#people-table thead {
+			font-size: 16px;
+			border-bottom: 1px solid #e0e0e0;
+		}
+
+		#people-table thead td {
+			height: 24px;
+		}
+
+		#people-table thead td:hover {
+			cursor: pointer;
+		}
+
+		#people-table thead td.sorting-by {
+			font-weight: bold;
+		}
+
+		#people-table thead td.sorting-by::after {
+			font-family: FontAwesome;
+			content: " \f0d7";
+		}
+
+		#people-table tbody td {
+			height: 32px;
+			color: #808080;
+			vertical-align: bottom;
 		}
