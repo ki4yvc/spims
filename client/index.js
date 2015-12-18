@@ -27,7 +27,7 @@ function logIn(userID, userPassword) {
 	this.userID = userID;
 	this.userPassword = userPassword;
 	userName = "Adam Greene"; // or whatever the XHR returns
-	userPosition = "administrator"; // or whatever the XHR returns
+	userPosition = "Admin"; // or whatever the XHR returns
 	// It also returns the HTML for the available pages
 	pages = [["people", "<div id='people-page' class='page'></div>"],
 			["inventory", "<div id='inventory-page' class='page'></div>"]];
@@ -39,7 +39,8 @@ function logOut() {
 }
 
 function setUp() {
-	currentUser.className = currentUser.className + " " + userPosition;
+	currentUser.className = currentUser.className + " " +
+			userPosition.toLowerCase();
 	currentUser.innerHTML = userName;
 	currentUser.title = "User is " + userPosition;
 

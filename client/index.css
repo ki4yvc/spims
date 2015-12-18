@@ -72,7 +72,7 @@ body {
 			background-color: #003f66;
 		}
 
-		#current-user.administrator:hover {
+		#current-user.admin:hover {
 			background-color: #00bda7;
 			transition: 0.5s;
 		}
@@ -172,4 +172,14 @@ body {
 			height: 32px;
 			color: #808080;
 			vertical-align: bottom;
+		}
+
+		#people-table tbody td span.position-text {
+			padding: 4px;
+			color: white;
+			border-radius: 4px;
+		}
+
+		#people-table tbody td span.position-text.admin {
+			background-color: #00bda7;
 		}
