@@ -174,7 +174,7 @@ body {
 		}
 
 		#people-table thead td.sorting-by::after {
-			color: black;
+			color: #404040;
 		}
 
 		#people-table tr:hover {
@@ -182,14 +182,15 @@ body {
 		}
 
 		#people-table tbody td {
-			height: 32px;
+			padding-top: 16px;
 			color: #808080;
-			vertical-align: bottom;
+			line-height: 18px;
 		}
 
 		#people-table tbody td span.position-text {
-			padding: 4px;
+			padding: 2px 4px;
 			color: white;
+			background-color: #5e5e5e;
 			border-radius: 4px;
 		}
 
