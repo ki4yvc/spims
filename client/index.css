@@ -18,7 +18,7 @@ body {
 	    width: calc(100vw - 96px);
 	    height: 28px;
 	    background-color: #3f6323;
-	    border-bottom: 4px solid #0b490f;
+	    border-bottom: 4px solid #4aea31;
 	}
 
 	/* Page menu */
@@ -37,7 +37,7 @@ body {
 			opacity: 0.8;
 			overflow: hidden;
 			color: white;
-			background-color: #005080;
+			background-color: #0800ba;
 			border-radius: 4px;
 			font-size: 13px;
 			text-align: center;
@@ -58,7 +58,7 @@ body {
 		.account-menu-button {
 			padding: 6px 24px;
 			line-height: 16px;
-			background-color: #005080;
+			background-color: #0800ba;
 			cursor: pointer;
 			transition: 0.5s;
 		}
