@@ -1,0 +1,10 @@
+{
+	"themeColor": "#009fff",
+	"roleColors": {
+		"admin": "#00bda7",
+		"secretary": "",
+		"treasurer": "",
+		"captain": "",
+		"user": "#5e5e5e"
+	}
+}
