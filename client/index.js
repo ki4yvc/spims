@@ -47,11 +47,11 @@ function setUp() {
 function loadPage(pageName) {
 	// Do XHR to load page data
 	// The rest assumes that it successfully loaded people
-	var peopleData = [{"name": "Greene, Adam, D","id": "00000000","position": "Admin","address": "1600 Pennsylvania Ave NW, Washington, DC 20500","phone": "(202) 456-1111","email": "greene.adam.d@gmail.com"}]
+	var peopleData = [{"name": "Greene, Adam, D","id": "00000000","position": "Admin","address": "1600 Pennsylvania Ave NW, Washington, DC 20500","phone": "(202) 456-1111","email": "greene.adam.d@gmail.com"},{"name": "Gagnon, Kevin, M","id": "00000001","position": "User","address": "1400 Old Tamah Rd, Irmo, SC 29063","phone": "(803) 476-3300","email": "kevinmgagnon@icloud.com"}]
 	var peopleTable = document.createElement('table');
 	peopleTable.id = "people-table";
 	var thead = document.createElement('thead');
-	thead.innerHTML = "<td class='sorting-by'>Name</td><td>ID</td><td>Position</td><td>Address</td><td>Phone</td><td>Email</td>";
+	thead.innerHTML = "<td class='sorting-by'>Name</td><td>ID</td><td>Role</td><td>Address</td><td>Phone</td><td>Email</td>";
 	peopleTable.appendChild(thead);
 	var tbody = document.createElement('tbody');
 	for (var i = 0; i < peopleData.length; i++) {
@@ -102,6 +102,7 @@ function sortTableBy() {
 			}
 		}
 		this.className = "sorting-by";
+		// Do sorting
 	}
 }
 

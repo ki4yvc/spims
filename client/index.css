@@ -188,10 +188,13 @@ body {
 		}
 
 		#people-table tbody td span.position-text {
-			padding: 2px 4px;
+			padding: 2px 6px;
+			min-width: 80px;
+			display: inline-block;
 			color: white;
 			background-color: #5e5e5e;
 			border-radius: 4px;
+			text-align: center;
 		}
 
 		#people-table tbody td span.position-text.admin {
