@@ -21,6 +21,10 @@ body {
 	    border-bottom: 4px solid #0077bf;
 	}
 
+	#logo {
+		height: 28px;
+	}
+
 	/* Page menu */
 		#page-menu {
 			position: absolute;
