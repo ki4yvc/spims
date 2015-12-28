@@ -1,3 +1,4 @@
+var orgName = ""
 var userID = "";
 var userPassword = "";
 var userName = "";
@@ -9,6 +10,7 @@ window.onload = function() {
 }
 
 function setElements() {
+	logo = document.getElementById('logo');
 	accountMenu = document.getElementById('account-menu');
 	currentUser = document.getElementById('current-user');
 	logOutButton = document.getElementById('log-out-button');
@@ -21,6 +23,7 @@ function setElements() {
 function logIn(userID, userPassword) {
 	// Do XHR here to see if userID and userPassword match
 	// The rest of this concept assumes that it does
+	orgName = "Whitmire Rescue Squad";
 	this.userID = userID;
 	this.userPassword = userPassword;
 	userName = "Adam Greene"; // or whatever the XHR returns
@@ -41,6 +44,9 @@ function setUp() {
 			userPosition.toLowerCase();
 	currentUser.innerHTML = userName;
 	currentUser.title = "User is " + userPosition;
+	document.title = orgName;
+	logo.alt = orgName;
+	logo.title = orgName;
 	addEventListeners();
 }
 
