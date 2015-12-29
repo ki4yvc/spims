@@ -1,5 +1,5 @@
 body {
-    margin: 0px;
+	margin: 0px;
 	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
 	color: #404040;
 }
@@ -15,10 +15,10 @@ body {
 	#header {
 		position: fixed;
 		padding: 6px 48px;
-	    width: calc(100vw - 96px);
-	    height: 28px;
-	    background-color: #009fff;
-	    border-bottom: 4px solid #0077bf;
+		width: calc(100vw - 96px);
+		height: 28px;
+		background-color: #009fff;
+		border-bottom: 4px solid #0077bf;
 	}
 
 	#logo {
@@ -32,7 +32,7 @@ body {
 			transform: translateX(-50%);
 		}
 
-	/* Account Menu */
+	/* Account menu */
 		#account-menu {
 			position: relative;
 			min-width: 128px;
@@ -100,19 +100,23 @@ body {
 		z-index: 1;
 	}
 
+	#toolbar input, #toolbar button {
+		height: 100%;
+		box-sizing: border-box;
+	}
+
 	#toolbar-search-form {
-		display: inline-block;
+		display: inline;
 	}
 
 	#toolbar-search-form input[type="text"] {
-        padding: 2px 8px;
+		padding: 2px 8px;
 		width: 256px;
-		height: 18px;
 		color: #606060;
 		background: #f8f8f8;
 		font-family: inherit;
 		border: none;
-		border-radius: 4px;
+		border-radius: 4px 0px 0px 4px;
 	}
 
 	#toolbar-search-form input[type="text"]:focus {
@@ -120,22 +124,45 @@ body {
 		outline: none;
 	}
 
-	#toolbar-search-form button[type="submit"] {
-        width: 40px;
-		height: 22px;
-		color: white;
-		background-color: #009fff;
-		border: none;
-		border-radius: 4px;
+	#toolbar-search-form button {
+		border-radius: 0px 4px 4px 0px;
 	}
 
-	#toolbar-search-form button[type="submit"]:focus {
+	#toolbar button {
+		padding-left: 14px;
+		padding-right: 14px;
+		color: white;
+		background-color: #009fff;
+		cursor: pointer;
+		border: none;
+	}
+
+	#toolbar button:focus {
 		outline: none;
 	}
 
-	#toolbar-search-form button[type="submit"]:active {
+	#toolbar button:active {
 		background-color: #008ee6;
 	}
+
+	/* Action buttons */
+		#action-buttons {
+			display: inline;
+			margin-left: 24px;
+		}
+
+		#action-buttons button {
+			font-family: inherit;
+			border-radius: 4px;
+		}
+
+		#action-buttons button:nth-child(n+2) {
+			margin-left: 4px;
+		}
+		#action-buttons button.disabled {
+			opacity: 0.4;
+			cursor: default;
+		}
 
 /* Content */
 	#content {
@@ -163,11 +190,11 @@ body {
 		padding-bottom: 0px;
 	}
 
-	#content table thead td:hover {
+	#content table thead td:not(.unsortable):hover {
 		cursor: pointer;
 	}
 
-	#content table thead td::after {
+	#content table thead td:not(.unsortable)::after {
 		content: " \f0d7";
 		color: rgba(0, 0, 0, 0);
 		font-family: FontAwesome;

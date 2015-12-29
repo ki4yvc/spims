@@ -1,7 +1,11 @@
 {
-	"actions": ["Add Person"],
+	"actions": {
+		"buttons": ["Add Person", "Remove Person", "Alert"],
+		"selection": [1, 2]
+	},
 	"table": {
 		"columns": ["Name", "ID", "*Role", "Address", "Phone", "Email"],
+		"unsortables": [],
 		"data": [
 			{
 				"name": "Greene, Adam, D",
