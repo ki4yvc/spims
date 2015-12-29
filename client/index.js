@@ -1,16 +1,18 @@
-var orgName = ""
-var userID = "";
-var userPassword = "";
-var userName = "";
-var userPosition = "";
 var pages = [];
 
 window.onload = function() {
-	logIn("00378522", "aGreene5764"); // Would use whatever the user input
+	getPages();
+	loadPage(pages[0]);
+	setElements();
+	addEventListeners();
+}
+
+function getPages() {
+	// Do XHR to get list of available pages
+	pages = ["people", "inventory", "equipment"];
 }
 
 function setElements() {
-	logo = document.getElementById('logo');
 	accountMenu = document.getElementById('account-menu');
 	currentUser = document.getElementById('current-user');
 	logOutButton = document.getElementById('log-out-button');
@@ -18,73 +20,6 @@ function setElements() {
 	if (pages.indexOf("people") > -1) {
 		peopleTableHeaderData = document.getElementById('people-table').children[0].getElementsByTagName('td');
 	}
-}
-
-function logIn(userID, userPassword) {
-	// Do XHR here to see if userID and userPassword match
-	// The rest of this concept assumes that it does
-	orgName = "Whitmire Rescue Squad";
-	this.userID = userID;
-	this.userPassword = userPassword;
-	userName = "Adam Greene"; // or whatever the XHR returns
-	userPosition = "Admin"; // or whatever the XHR returns
-	// It also returns the available pages
-	pages = ["people", "inventory", "equipment"];
-	loadPage(pages[0]);
-	setUp();
-}
-
-function logOut() {
-	// Log out
-}
-
-function setUp() {
-	setElements();
-	currentUser.className = currentUser.className + " " +
-			userPosition.toLowerCase();
-	currentUser.innerHTML = userName;
-	currentUser.title = "User is " + userPosition;
-	document.title = orgName;
-	logo.alt = orgName;
-	logo.title = orgName;
-	addEventListeners();
-}
-
-function loadPage(pageName) {
-	// Do XHR to load page data
-	// The rest assumes that it successfully loaded people
-	var peopleData = [{"name": "Greene, Adam, D","id": "00000000","position": "Admin","address": "1600 Pennsylvania Ave NW, Washington, DC 20500","phone": "(202) 456-1111","email": "greene.adam.d@gmail.com"},{"name": "Gagnon, Kevin, M","id": "00000001","position": "User","address": "1400 Old Tamah Rd, Irmo, SC 29063","phone": "(803) 476-3300","email": "kevinmgagnon@icloud.com"}]
-	var peopleTable = document.createElement('table');
-	peopleTable.id = "people-table";
-	var thead = document.createElement('thead');
-	thead.innerHTML = "<td class='sorting-by'>Name</td><td>ID</td><td>Role</td><td>Address</td><td>Phone</td><td>Email</td>";
-	peopleTable.appendChild(thead);
-	var tbody = document.createElement('tbody');
-	for (var i = 0; i < peopleData.length; i++) {
-		var row = document.createElement('tr');
-		var td = (document.createElement('td'));
-		td.innerHTML = peopleData[i].name;
-		row.appendChild(td);
-		td = (document.createElement('td'));
-		td.innerHTML = peopleData[i].id
-		row.appendChild(td);
-		td = (document.createElement('td'));
-		td.innerHTML = "<span>" + peopleData[i].position + "</span>"
-		td.children[0].className = "position-text " + peopleData[i].position.toLowerCase();
-		row.appendChild(td);
-		td = (document.createElement('td'));
-		td.innerHTML = peopleData[i].address
-		row.appendChild(td);
-		td = (document.createElement('td'));
-		td.innerHTML = peopleData[i].phone
-		row.appendChild(td);
-		td = (document.createElement('td'));
-		td.innerHTML = peopleData[i].email
-		row.appendChild(td);
-		tbody.appendChild(row);
-	}
-	peopleTable.appendChild(tbody);
-	content.appendChild(peopleTable);
 }
 
 function addEventListeners() {
@@ -97,6 +32,76 @@ function addEventListeners() {
 			peopleTableHeaderData[i].addEventListener('click', sortTableBy);
 		}
 	}
+}
+
+function logOut() {
+	// Log out
+}
+
+function loadPage(pageName) {
+	// Do XHR to load page data, include Customer ID and login cookie
+	// The rest assumes that it successfully loaded people
+	var pageData = {
+		"actions": ["Add Person"],
+		"table": {
+			"columns": ["Name", "ID", "*Role", "Address", "Phone", "Email"],
+			"data": [
+				{
+					"name": "Greene, Adam, D",
+					"id": "00000000",
+					"role": "Admin",
+					"address": "1600 Pennsylvania Ave NW, Washington, DC 20500",
+					"phone": "(202) 456-1111",
+					"email": "greene.adam.d@gmail.com"
+				},
+				{
+					"name": "Gagnon, Kevin, M",
+					"id": "00000001",
+					"role": "User",
+					"address": "1400 Old Tamah Rd, Irmo, SC 29063",
+					"phone": "(803) 476-3300",
+					"email": "kevinmgagnon@icloud.com"
+				}
+			]
+		}
+	};
+	toggleClass(content, pageName);
+	var table = document.createElement('table');
+	var colorColumns = []
+	var thead = document.createElement('thead');
+	for (var i = 0; i < pageData.table.columns.length; i++) {
+		var td = document.createElement('td');
+		if (pageData.table.columns[i].substring(0, 1) == "*") {
+			pageData.table.columns[i] = pageData.table.columns[i].substring(1);
+			colorColumns.push(i);
+		}
+		td.innerHTML = pageData.table.columns[i];
+		thead.appendChild(td);
+	}
+	toggleClass(thead.children[0], "sorting-by");
+	table.appendChild(thead);
+	var tbody = document.createElement('tbody');
+	for (var i = 0; i < pageData.table.data.length; i++) {
+		var tr = document.createElement('tr');
+		for (var j = 0; j < pageData.table.columns.length; j++) {
+			var td = document.createElement('td');
+			td.innerHTML = pageData.table.data[i][pageData.table.columns[j].toLowerCase()];
+			tr.appendChild(td);
+		}
+		tbody.appendChild(tr);
+	}
+	for (var i = 0; i < tbody.children.length; i++) {
+		for (var j = 0; j < colorColumns.length; j++) {
+			console.log(tbody.children[i].children[colorColumns[j]]);
+			colorData = tbody.children[i].children[colorColumns[j]];
+			colorData.innerHTML = "<span>" + colorData.innerHTML + "</span>";
+			toggleClass(colorData.children[0], "colordata");
+			toggleClass(colorData.children[0], thead.children[colorColumns[j]].innerHTML.toLowerCase());
+			toggleClass(colorData.children[0], colorData.children[0].innerHTML.toLowerCase());
+		}
+	}
+	table.appendChild(tbody);
+	content.appendChild(table);
 }
 
 function sortTableBy() {
@@ -114,7 +119,9 @@ function sortTableBy() {
 
 function toggleClass(element, className) {
 	var index = element.className.indexOf(className);
-	if (index > -1) {
+	if (element.className == "") {
+		element.className = className;
+	} else if (index > -1) {
 		var newClassName = element.className.substring(0, index) + element.className.substring(index + className.length);
 		element.className = newClassName.replace(/\s+/g, " ").trim();
 	} else {

@@ -102,7 +102,6 @@ body {
 
 	#toolbar-search-form {
 		display: inline-block;
-		margin-right: 16px;
 	}
 
 	#toolbar-search-form input[type="text"] {
@@ -144,63 +143,72 @@ body {
 		font-size: 14px;
 	}
 
+	#content table {
+		width: 100%;
+		border-collapse: collapse;
+	}
+
+	#content table thead {
+		font-size: 16px;
+		border-bottom: 1px solid #e0e0e0;
+	}
+
+	#content table td {
+		padding: 8px;
+		height: 24px;
+	}
+
+	#content table thead td {
+		padding-top: 0px;
+		padding-bottom: 0px;
+	}
+
+	#content table thead td:hover {
+		cursor: pointer;
+	}
+
+	#content table thead td::after {
+		content: " \f0d7";
+		color: rgba(0, 0, 0, 0);
+		font-family: FontAwesome;
+	}
+
+	#content table thead td:hover::after {
+		color: rgba(0, 0, 0, 0.2);
+	}
+
+	#content table thead td.sorting-by {
+		font-weight: bold;
+	}
+
+	#content table thead td.sorting-by::after {
+		color: #404040;
+	}
+
+	#content table tbody tr:nth-child(even) {
+		background-color: #f8f8f8;
+	}
+
+	#content table tbody td {
+		color: #808080;
+		line-height: 18px;
+	}
+
+	#content table tbody td:first-child:hover {
+		cursor: pointer;
+		text-decoration: underline;
+	}
+
+	#content table tbody td span.colordata {
+		padding: 2px 12px;
+		display: inline-block;
+		color: white;
+		background-color: #5e5e5e;
+		border-radius: 4px;
+		text-align: center;
+	}
+
 	/* People */
-		#people-table {
-			width: 100%;
-			border-collapse: collapse;
-		}
-
-		#people-table thead {
-			font-size: 16px;
-			border-bottom: 1px solid #e0e0e0;
-		}
-
-		#people-table thead td {
-			height: 24px;
-		}
-
-		#people-table thead td:hover {
-			cursor: pointer;
-		}
-
-		#people-table thead td::after {
-			content: " \f0d7";
-			color: rgba(0, 0, 0, 0);
-			font-family: FontAwesome;
-		}
-
-		#people-table thead td:hover::after {
-			color: rgba(0, 0, 0, 0.2);
-		}
-
-		#people-table thead td.sorting-by {
-			font-weight: bold;
-		}
-
-		#people-table thead td.sorting-by::after {
-			color: #404040;
-		}
-
-		#people-table tr:hover {
-			cursor: pointer;
-		}
-
-		#people-table tbody td {
-			padding-top: 16px;
-			color: #808080;
-			line-height: 18px;
-		}
-
-		#people-table tbody td span.position-text {
-			padding: 2px 6px;
-			min-width: 80px;
-			display: inline-block;
-			color: white;
-			background-color: #5e5e5e;
-			border-radius: 4px;
-			text-align: center;
-		}
-
-		#people-table tbody td span.position-text.admin {
+		#content.people table tbody td span.colordata.role.admin {
 			background-color: #00bda7;
 		}

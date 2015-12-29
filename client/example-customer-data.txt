@@ -1,0 +1,13 @@
+In a database, the following should be stored for each customer:
+
+General:
+- Name                 [Ex: Whitmire Rescue Squad]
+- Theme color          [Ex: #009fff (the other colors would be derived from this by darkening)]
+
+Roles:                 [Admin and default user are always present, others are chosen by customer, each must have a color and set page permissions]
+- Admin
+	- Color            [Ex: #00bda7]
+	- Permissions      [Always all pages]
+- User
+	- Color            [Ex: #5e5e5e]
+	- Permissions      [Ex: inventory, incident records]

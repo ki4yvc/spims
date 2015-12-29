@@ -1,18 +1,24 @@
-[
-	{
-		"name": "Greene, Adam, D",
-		"id": "00000000",
-		"role": "Admin",
-		"address": "1600 Pennsylvania Ave NW, Washington, DC 20500",
-		"phone": "(202) 456-1111",
-		"email": "greene.adam.d@gmail.com"
-	},
-	{
-		"name": "Gagnon, Kevin, M",
-		"id": "00000001",
-		"role": "User",
-		"address": "1400 Old Tamah Rd, Irmo, SC 29063",
-		"phone": "(803) 476-3300",
-		"email": "kevinmgagnon@icloud.com"
+{
+	"actions": ["Add Person"],
+	"table": {
+		"columns": ["Name", "ID", "*Role", "Address", "Phone", "Email"],
+		"data": [
+			{
+				"name": "Greene, Adam, D",
+				"id": "00000000",
+				"role": "Admin",
+				"address": "1600 Pennsylvania Ave NW, Washington, DC 20500",
+				"phone": "(202) 456-1111",
+				"email": "greene.adam.d@gmail.com"
+			},
+			{
+				"name": "Gagnon, Kevin, M",
+				"id": "00000001",
+				"role": "User",
+				"address": "1400 Old Tamah Rd, Irmo, SC 29063",
+				"phone": "(803) 476-3300",
+				"email": "kevinmgagnon@icloud.com"
+			}
+		]
 	}
-]
+}
