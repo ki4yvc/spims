@@ -1,15 +1,45 @@
 {
-	"actions": {
-		"buttons": ["Add Person", "Remove Person", "Alert"],
-		"selection": [1, 2]
-	},
+	"actions": [
+		{
+			"name": "Add Person",
+		},
+		{
+			"name": "Remove Person",
+			"attributes": ["selection"]
+		},
+		{
+			"name": "Alert",
+			"attributes": ["selection"]
+		}
+	],
 	"table": {
-		"columns": ["Name", "ID", "*Role", "Address", "Phone", "Email"],
-		"unsortables": [],
+		"columns": [
+			{
+				"name": "Name",
+				"attributes": ["sortingby"]
+			},
+			{
+				"name": "ID"
+			},
+			{
+				"name": "Role",
+				"attributes": ["colorcolumn"]
+			},
+			{
+				"name": "Address",
+				"attributes": ["unsortable"]
+			},
+			{
+				"name": "Phone"
+			},
+			{
+				"name": "Email"
+			}
+		],
 		"data": [
 			{
 				"name": "Greene, Adam, D",
-				"id": "00000000",
+				"id": "1624",
 				"role": "Admin",
 				"address": "1600 Pennsylvania Ave NW, Washington, DC 20500",
 				"phone": "(202) 456-1111",
@@ -17,7 +47,7 @@
 			},
 			{
 				"name": "Gagnon, Kevin, M",
-				"id": "00000001",
+				"id": "1625",
 				"role": "User",
 				"address": "1400 Old Tamah Rd, Irmo, SC 29063",
 				"phone": "(803) 476-3300",

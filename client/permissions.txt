@@ -1,0 +1,9 @@
+General:
+	- Organization settings
+
+People:
+	- View people
+	- Alert
+	- Add person
+	- Edit person
+	- Remove person

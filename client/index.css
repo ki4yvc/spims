@@ -14,9 +14,11 @@ body {
 /* Header */
 	#header {
 		position: fixed;
+		top: 0px;
 		padding: 6px 48px;
-		width: calc(100vw - 96px);
-		height: 28px;
+		width: 100vw;
+		height: 44px;
+		box-sizing: border-box;
 		background-color: #009fff;
 		border-bottom: 4px solid #0077bf;
 	}
@@ -159,15 +161,67 @@ body {
 		#action-buttons button:nth-child(n+2) {
 			margin-left: 4px;
 		}
-		#action-buttons button.disabled {
+		#action-buttons button[disabled] {
 			opacity: 0.4;
 			cursor: default;
 		}
 
 /* Content */
 	#content {
-		padding: 100px 48px 256px;
+		position: relative;
+		margin: 100px 48px 0px;
+		height: calc(100vh - 150px);
 		font-size: 14px;
+	}
+
+	#content .table-header {
+		position: absolute;
+		top: 0px;
+		width: 100%;
+		height: 40px;
+		display: table;
+		box-sizing: border-box;
+		background: linear-gradient(white, rgba(255, 255, 255, 0.9));
+		font-size: 16px;
+		border-bottom: 1px solid rgba(224, 224, 224, 0.9);
+	}
+
+	#content .table-header div {
+		height: 100%;
+		display: table-cell;
+		vertical-align: middle;
+		box-sizing: border-box;
+	}
+
+	#content .table-header div, #content table td {
+		padding: 8px;
+	}
+
+	#content .table-header div:not(.unsortable):hover {
+		cursor: pointer;
+	}
+
+	#content .table-header div:not(.unsortable)::after {
+		content: " \f0d7";
+		color: rgba(0, 0, 0, 0);
+		font-family: FontAwesome;
+	}
+
+	#content .table-header div:hover::after {
+		color: rgba(0, 0, 0, 0.2);
+	}
+
+	#content .table-header div.sorting-by {
+		font-weight: bold;
+	}
+
+	#content .table-header div.sorting-by::after {
+		color: #404040;
+	}
+
+	#content .table-container {
+		height: calc(100% - 50px);
+		overflow: auto;
 	}
 
 	#content table {
@@ -175,58 +229,26 @@ body {
 		border-collapse: collapse;
 	}
 
-	#content table thead {
-		font-size: 16px;
-		border-bottom: 1px solid #e0e0e0;
+	#content table tr:first-child {
+		height: 40px;
 	}
 
-	#content table td {
-		padding: 8px;
-		height: 24px;
-	}
-
-	#content table thead td {
-		padding-top: 0px;
-		padding-bottom: 0px;
-	}
-
-	#content table thead td:not(.unsortable):hover {
-		cursor: pointer;
-	}
-
-	#content table thead td:not(.unsortable)::after {
-		content: " \f0d7";
-		color: rgba(0, 0, 0, 0);
-		font-family: FontAwesome;
-	}
-
-	#content table thead td:hover::after {
-		color: rgba(0, 0, 0, 0.2);
-	}
-
-	#content table thead td.sorting-by {
-		font-weight: bold;
-	}
-
-	#content table thead td.sorting-by::after {
-		color: #404040;
-	}
-
-	#content table tbody tr:nth-child(even) {
+	#content table tr:nth-child(even) {
 		background-color: #f8f8f8;
 	}
 
-	#content table tbody td {
+	#content table td {
+		height: 24px;
 		color: #808080;
 		line-height: 18px;
 	}
 
-	#content table tbody td:first-child:hover {
+	#content table td:first-child:hover {
 		cursor: pointer;
 		text-decoration: underline;
 	}
 
-	#content table tbody td span.colordata {
+	#content table td span.colordata {
 		padding: 2px 12px;
 		display: inline-block;
 		color: white;
@@ -236,6 +258,6 @@ body {
 	}
 
 	/* People */
-		#content.people table tbody td span.colordata.role.admin {
+		#content.people table td span.colordata.role.admin {
 			background-color: #00bda7;
 		}

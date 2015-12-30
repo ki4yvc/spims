@@ -4,8 +4,6 @@ window.onload = function() {
 	getPages();
 	setElementsBefore();
 	loadPage(pages[0]);
-	setElementsAfter();
-	addEventListeners();
 }
 
 function getPages() {
@@ -19,27 +17,23 @@ function setElementsBefore() {
 	logOutButton = document.getElementById('log-out-button');
 	actionButtons = document.getElementById('action-buttons');
 	content = document.getElementById('content');
-}
 
-function setElementsAfter() {
-	table = content.getElementsByTagName('table')[0];
-	tableHeadData = table.children[0].children;
-	tableCheckboxes = table.getElementsByTagName('input');
-	for (var i = 0; i < tableCheckboxes.length; i++) {
-		if (tableCheckboxes[i].type != "checkbox") {
-			tableCheckboxes.splice(i, 1);
-			i -= 1;
-		}
-	}
-}
-
-function addEventListeners() {
 	currentUser.addEventListener('click', function() {
 		toggleClass(accountMenu, 'selected');
 	});
 	logOutButton.addEventListener('click', logOut);
+}
+
+function setElementsAfter() {
+	tableHead = content.getElementsByClassName('table-header')[0];
+	tableHeadData = tableHead.getElementsByTagName('div');
+	table = content.getElementsByTagName('table')[0];
+	tableCheckboxes = content.querySelectorAll('input[type="checkbox"]');
+
 	for (var i = 0; i < tableHeadData.length; i++) {
-		tableHeadData[i].addEventListener('click', sortTableBy);
+		if (!existsAndHas(tableHeadData[i].className, "unsortable")) {
+			tableHeadData[i].addEventListener('click', sortTableBy);
+		}
 	}
 	for (var i = 0; i < tableCheckboxes.length; i++) {
 		tableCheckboxes[i].addEventListener('change', selectRow);
@@ -48,7 +42,7 @@ function addEventListeners() {
 
 function selectRow() {
 	var checked = [];
-	if (this.parentNode.parentNode.parentNode.tagName.toLowerCase() == "thead") {
+	if (tableHead.contains(this)) {
 		for (var i = 0; i < tableCheckboxes.length; i++) {
 			tableCheckboxes[i].checked = this.checked;
 		}
@@ -63,29 +57,61 @@ function selectRow() {
 	tableCheckboxes[0].checked = checked.indexOf(false) == -1;
 	var selections = actionButtons.getElementsByClassName('selection');
 	for (var i = 0; i < selections.length; i++) {
-		toggleClass(selections[i], "disabled", checked.indexOf(true) == -1);
+		if (checked.indexOf(true) == -1) {
+			selections[i].disabled = true;
+			selections[i].title = "Please select at least one entry";
+		} else {
+			selections[i].disabled = false;
+			selections[i].removeAttribute('title');
+		}
 	}
 }
 
-function logOut() {
-	// Log out
-}
-
-function loadPage(pageName) {
+function loadPage(pageName, searchQuery, sortingBy = "", pageNumber = 1, resultsPerPage = 50) {
 	// Do XHR to load page data, include Customer ID and login cookie
 	// The rest assumes that it successfully loaded people
 	var pageData = {
-		"actions": {
-			"buttons": ["Add Person", "Remove Person", "Alert"],
-			"selection": [1, 2]
-		},
+		"actions": [
+			{
+				"name": "Add Person",
+			},
+			{
+				"name": "Remove Person",
+				"attributes": ["selection"]
+			},
+			{
+				"name": "Alert",
+				"attributes": ["selection"]
+			}
+		],
 		"table": {
-			"columns": ["Name", "ID", "*Role", "Address", "Phone", "Email"],
-			"unsortables": [],
+			"columns": [
+				{
+					"name": "Name",
+					"attributes": ["sortingby"]
+				},
+				{
+					"name": "ID"
+				},
+				{
+					"name": "Role",
+					"attributes": ["colorcolumn"]
+				},
+				{
+					"name": "Address",
+					"attributes": ["unsortable"]
+				},
+				{
+					"name": "Phone"
+				},
+				{
+					"name": "Email"
+				}
+			],
 			"data": [
 				{
 					"name": "Greene, Adam, D",
-					"id": "00000000",
+					"id": "1624",
 					"role": "Admin",
 					"address": "1600 Pennsylvania Ave NW, Washington, DC 20500",
 					"phone": "(202) 456-1111",
@@ -93,7 +119,7 @@ function loadPage(pageName) {
 				},
 				{
 					"name": "Gagnon, Kevin, M",
-					"id": "00000001",
+					"id": "1625",
 					"role": "User",
 					"address": "1400 Old Tamah Rd, Irmo, SC 29063",
 					"phone": "(803) 476-3300",
@@ -104,75 +130,112 @@ function loadPage(pageName) {
 	};
 	content.className = pageName;
 	var table = document.createElement('table');
-	var colorColumns = []
-	var thead = document.createElement('thead');
-	for (var i = 0; i < pageData.table.columns.length; i++) {
-		var td = document.createElement('td');
-		if (pageData.table.columns[i].substring(0, 1) == "*") {
-			pageData.table.columns[i] = pageData.table.columns[i].substring(1);
-			colorColumns.push(i);
-		}
-		if (pageData.table.unsortables.indexOf(i) > -1) {
-			toggleClass(td, "unsortable");
-		}
-		td.innerHTML = pageData.table.columns[i];
-		thead.appendChild(td);
-	}
-	thead.innerHTML = "<tr>" + thead.innerHTML + "</tr>";
-	toggleClass(thead.children[0].children[0], "sorting-by");
-	table.appendChild(thead);
-	var tbody = document.createElement('tbody');
+
+	// Makes table body
+	table.appendChild(document.createElement('tr'));
 	for (var i = 0; i < pageData.table.data.length; i++) {
 		var tr = document.createElement('tr');
 		for (var j = 0; j < pageData.table.columns.length; j++) {
 			var td = document.createElement('td');
-			td.innerHTML = pageData.table.data[i][pageData.table.columns[j].toLowerCase()];
+			td.innerHTML = pageData.table.data[i][pageData.table.columns[j].name.toLowerCase()];
 			tr.appendChild(td);
 		}
-		tbody.appendChild(tr);
+		table.appendChild(tr);
 	}
-	for (var i = 0; i < tbody.children.length; i++) {
+
+	// Makes table head
+	var colorColumns = [];
+	var sorting = [];
+	var thead = document.createElement('div');
+	toggleClass(thead, "table-header", true);
+	for (var i = 0; i < pageData.table.columns.length; i++) {
+		var div = document.createElement('div');
+		var column = pageData.table.columns[i];
+		if (existsAndHas(column.attributes, "colorcolumn")) {
+			colorColumns.push(i);
+		}
+		if (existsAndHas(column.attributes, "unsortable")) {
+			sorting[i] = -1;
+			toggleClass(div, "unsortable", true);
+		} else if (existsAndHas(column.attributes, "sortingby")){
+			sorting[i] = 1;
+		} else {
+			sorting[i] = 0;
+		}
+		div.innerHTML = pageData.table.columns[i].name;
+		thead.appendChild(div);
+	}
+	if (sorting.indexOf(1) != -1) {
+		toggleClass(thead.children[sorting.indexOf(1)], "sorting-by", true);
+	} else if (sorting.indexOf(0) != -1){
+		toggleClass(thead.children[sorting.indexOf(0)], "sorting-by", true);
+	}
+
+	// Sets color data
+	for (var i = 1; i < table.children.length; i++) {
 		for (var j = 0; j < colorColumns.length; j++) {
-			colorData = tbody.children[i].children[colorColumns[j]];
-			colorData.innerHTML = "<span>" + colorData.innerHTML + "</span>";
-			toggleClass(colorData.children[0], "colordata");
-			toggleClass(colorData.children[0], thead.children[0].children[colorColumns[j]].innerHTML.toLowerCase());
-			toggleClass(colorData.children[0], colorData.children[0].innerHTML.toLowerCase());
+			var colordata = table.children[i].children[colorColumns[j]];
+			colordata.innerHTML = "<span>" + colordata.innerHTML + "</span>";
+			var span = colordata.children[0];
+			toggleClass(span, "colordata", true);
+			toggleClass(span, thead.children[colorColumns[j]].innerHTML.toLowerCase(), true);
+			toggleClass(span, span.innerHTML.toLowerCase(), true);
 		}
 	}
-	table.appendChild(tbody);
-	if (pageData.actions.selection.length > 0) {
-		var trows = table.getElementsByTagName('tr');
-		for (var i = 0; i < trows.length; i++) {
+
+	// Makes checkboxes
+	for (var i = 0; i < pageData.actions.length; i++) {
+		if (existsAndHas(pageData.actions[i].attributes, "selection")) {
 			var checkbox = document.createElement('input');
 			checkbox.type = "checkbox";
 			var td = document.createElement('td');
 			td.appendChild(checkbox);
-			trows[i].insertBefore(td, trows[i].firstChild);
+			var trows = table.getElementsByTagName('tr');
+			for (var j = 1; j < trows.length; j++) {
+				trows[j].insertBefore(td.cloneNode(true), trows[j].firstChild);
+			}
+			var div = document.createElement('div');
+			div.appendChild(checkbox.cloneNode());
+			toggleClass(div, "unsortable", true);
+			thead.insertBefore(div, thead.firstChild);
+			break;
 		}
-		toggleClass(trows[0].children[0], "unsortable");
 	}
-	content.appendChild(table);
-	for (var i = 0; i < pageData.actions.buttons.length; i++) {
+
+	content.appendChild(thead);
+	var tableContainer = document.createElement('div');
+	toggleClass(tableContainer, "table-container", true);
+	tableContainer.appendChild(table);
+	content.appendChild(tableContainer);
+
+	for (var i = 0; i < thead.children.length; i++) {
+		thead.children[i].style.width = table.children[1].children[i].clientWidth + "px";
+	}
+
+	// Makes action buttons
+	for (var i = 0; i < pageData.actions.length; i++) {
 		var button = document.createElement('button');
-		button.innerHTML = pageData.actions.buttons[i];
-		if (pageData.actions.selection.indexOf(i) > -1) {
-			toggleClass(button, "selection");
-			toggleClass(button, "disabled");
+		button.innerHTML = pageData.actions[i].name;
+		if (existsAndHas(pageData.actions[i].attributes, "selection")) {
+			toggleClass(button, "selection", true);
+			button.disabled = true;
+			button.title = "Please select at least one entry";
 		}
 		actionButtons.appendChild(button);
 	}
+
+	setElementsAfter();
 }
 
 function sortTableBy() {
-	if (this.className != "sorting-by") {
+	if (!existsAndHas(this.className, "sorting-by")) {
 		for (var i = 0; i < tableHeadData.length; i++) {
 			if (tableHeadData[i].className == "sorting-by") {
-				toggleClass(tableHeadData[i], "sorting-by")
+				toggleClass(tableHeadData[i], "sorting-by", false)
 				break;
 			}
 		}
-		toggleClass(this, "sorting-by");
+		toggleClass(this, "sorting-by", true);
 		// Do XHR
 	}
 }
@@ -183,7 +246,7 @@ function toggleClass(element, className, on) {
 		element.className = className;
 	} else if (element.className == className && on != true) {
 		element.removeAttribute("class");
-	} else if (index > -1 && on != true) {
+	} else if (index != -1 && on != true) {
 		var newClassName = element.className.substring(0, index) + element.className.substring(index + className.length);
 		element.className = newClassName.replace(/\s+/g, " ").trim();
 	} else if (on != false) {
@@ -191,6 +254,17 @@ function toggleClass(element, className, on) {
 	}
 }
 
+function existsAndHas (array, element) {
+	if (array) {
+		return array.indexOf(element) != -1;
+	}
+	return false;
+}
+
 function search() {
 	return false;
+}
+
+function logOut() {
+	// Log out
 }
