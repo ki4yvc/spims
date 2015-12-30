@@ -2,7 +2,7 @@ var pages = [];
 
 window.onload = function() {
 	getPages();
-	setElementsBefore();
+	setUpBefore();
 	loadPage(pages[0]);
 }
 
@@ -11,7 +11,7 @@ function getPages() {
 	pages = ["people", "inventory", "equipment"];
 }
 
-function setElementsBefore() {
+function setUpBefore() {
 	accountMenu = document.getElementById('account-menu');
 	currentUser = document.getElementById('current-user');
 	logOutButton = document.getElementById('log-out-button');
@@ -24,7 +24,7 @@ function setElementsBefore() {
 	logOutButton.addEventListener('click', logOut);
 }
 
-function setElementsAfter() {
+function setUpAfter() {
 	tableHead = content.getElementsByClassName('table-header')[0];
 	tableHeadData = tableHead.getElementsByTagName('div');
 	table = content.getElementsByTagName('table')[0];
@@ -38,6 +38,8 @@ function setElementsAfter() {
 	for (var i = 0; i < tableCheckboxes.length; i++) {
 		tableCheckboxes[i].addEventListener('change', selectRow);
 	}
+
+	window.onresize = resizeTable();
 }
 
 function selectRow() {
@@ -208,10 +210,6 @@ function loadPage(pageName, searchQuery, sortingBy = "", pageNumber = 1, results
 	tableContainer.appendChild(table);
 	content.appendChild(tableContainer);
 
-	for (var i = 0; i < thead.children.length; i++) {
-		thead.children[i].style.width = table.children[1].children[i].clientWidth + "px";
-	}
-
 	// Makes action buttons
 	for (var i = 0; i < pageData.actions.length; i++) {
 		var button = document.createElement('button');
@@ -224,7 +222,15 @@ function loadPage(pageName, searchQuery, sortingBy = "", pageNumber = 1, results
 		actionButtons.appendChild(button);
 	}
 
-	setElementsAfter();
+	setUpAfter();
+	resizeTable();
+}
+
+function resizeTable() {
+	for (var i = 0; i < tableHeadData.length; i++) {
+		var percent = table.children[1].children[i].clientWidth / table.clientWidth * 100;
+		tableHeadData[i].style.width = percent + "%";
+	}
 }
 
 function sortTableBy() {
