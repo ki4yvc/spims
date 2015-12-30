@@ -18,6 +18,8 @@ body {
 		padding: 6px 48px;
 		width: 100vw;
 		height: 44px;
+		display: flex;
+		justify-content: space-between;
 		box-sizing: border-box;
 		background-color: #009fff;
 		border-bottom: 4px solid #0077bf;
@@ -29,17 +31,13 @@ body {
 
 	/* Page menu */
 		#page-menu {
-			position: absolute;
-			left: 50%;
-			transform: translateX(-50%);
+
 		}
 
 	/* Account menu */
 		#account-menu {
-			position: relative;
 			min-width: 128px;
 			height: 28px;
-			float: right;
 			opacity: 0.8;
 			overflow: hidden;
 			color: white;
@@ -91,11 +89,12 @@ body {
 /* Toolbar */
 	#toolbar {
 		position: absolute;
-		top: 44px;
+		bottom: -34px;
 		left: 0px;
 		padding: 4px 48px;
-		height: 22px;
-		width: calc(100vw - 96px);
+		height: 30px;
+		width: 100vw;
+		box-sizing: border-box;
 		background-color: #e0e0e0;
 		font-size: 14px;
 		box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.4);
@@ -171,6 +170,7 @@ body {
 		position: relative;
 		margin: 100px 48px 0px;
 		height: calc(100vh - 150px);
+		overflow: hidden;
 		font-size: 14px;
 	}
 

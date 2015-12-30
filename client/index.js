@@ -27,6 +27,7 @@ function setUpBefore() {
 function setUpAfter() {
 	tableHead = content.getElementsByClassName('table-header')[0];
 	tableHeadData = tableHead.getElementsByTagName('div');
+	tableContainer = content.getElementsByClassName('table-container')[0];
 	table = content.getElementsByTagName('table')[0];
 	tableCheckboxes = content.querySelectorAll('input[type="checkbox"]');
 
@@ -39,7 +40,7 @@ function setUpAfter() {
 		tableCheckboxes[i].addEventListener('change', selectRow);
 	}
 
-	window.onresize = resizeTable();
+	window.onresize = resizeTable;
 }
 
 function selectRow() {
@@ -228,8 +229,13 @@ function loadPage(pageName, searchQuery, sortingBy = "", pageNumber = 1, results
 
 function resizeTable() {
 	for (var i = 0; i < tableHeadData.length; i++) {
-		var percent = table.children[1].children[i].clientWidth / table.clientWidth * 100;
-		tableHeadData[i].style.width = percent + "%";
+		var width = table.children[1].children[i].clientWidth;
+		tableHeadData[i].style.width = width + "px";
+	}
+	if (tableContainer.clientWidth < tableContainer.scrollWidth) {
+		tableHead.style.width = table.clientWidth + "px";
+	} else {
+		tableHead.style.width = "";
 	}
 }
 
