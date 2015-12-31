@@ -41,6 +41,7 @@ function setUpAfter() {
 	}
 
 	window.onresize = resizeTable;
+	tableContainer.onscroll = scrollTableHead;
 }
 
 function selectRow() {
@@ -237,6 +238,10 @@ function resizeTable() {
 	} else {
 		tableHead.style.width = "";
 	}
+}
+
+function scrollTableHead() {
+	tableHead.style.left = "-" + tableContainer.scrollLeft + "px";
 }
 
 function sortTableBy() {
