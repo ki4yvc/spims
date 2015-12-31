@@ -30,6 +30,8 @@ function setUpAfter() {
 	tableContainer = content.getElementsByClassName('table-container')[0];
 	table = content.getElementsByTagName('table')[0];
 	tableCheckboxes = content.querySelectorAll('input[type="checkbox"]');
+	tableCheckboxes = Array.prototype.slice.call(tableCheckboxes);
+	tableCheckboxes.splice(1, 1);
 
 	for (var i = 0; i < tableHeadData.length; i++) {
 		if (!existsAndHas(tableHeadData[i].className, "unsortable")) {
@@ -72,6 +74,7 @@ function selectRow() {
 }
 
 function loadPage(pageName, searchQuery, sortingBy = "", pageNumber = 1, resultsPerPage = 50) {
+	showLoadingOverlay();
 	// Do XHR to load page data, include Customer ID and login cookie
 	// The rest assumes that it successfully loaded people
 	var pageData = {
@@ -81,6 +84,10 @@ function loadPage(pageName, searchQuery, sortingBy = "", pageNumber = 1, results
 			},
 			{
 				"name": "Remove Person",
+				"attributes": ["selection"]
+			},
+			{
+				"name": "Edit",
 				"attributes": ["selection"]
 			},
 			{
@@ -95,7 +102,7 @@ function loadPage(pageName, searchQuery, sortingBy = "", pageNumber = 1, results
 					"attributes": ["sortingby"]
 				},
 				{
-					"name": "ID"
+					"name": "Radio ID"
 				},
 				{
 					"name": "Role",
@@ -115,7 +122,7 @@ function loadPage(pageName, searchQuery, sortingBy = "", pageNumber = 1, results
 			"data": [
 				{
 					"name": "Greene, Adam, D",
-					"id": "1624",
+					"radio id": "1624",
 					"role": "Admin",
 					"address": "1600 Pennsylvania Ave NW, Washington, DC 20500",
 					"phone": "(202) 456-1111",
@@ -123,20 +130,36 @@ function loadPage(pageName, searchQuery, sortingBy = "", pageNumber = 1, results
 				},
 				{
 					"name": "Gagnon, Kevin, M",
-					"id": "1625",
-					"role": "User",
-					"address": "1400 Old Tamah Rd, Irmo, SC 29063",
-					"phone": "(803) 476-3300",
+					"radio id": "1625",
+					"role": "Secretary",
+					"address": "14 East 51st Street, New York, NY 10022",
+					"phone": "(212) 753-2261",
 					"email": "kevinmgagnon@icloud.com"
+				},
+				{
+					"name": "Lindler, Barry, P",
+					"radio id": "7975",
+					"role": "Captain",
+					"address": "1400 Old Tamah Road, Irmo, SC 29063",
+					"phone": "(803) 476-3300",
+					"email": "blindler@lexrich5.org"
 				}
-			]
+			],
+			"totalitems": 3
 		}
 	};
+	var totalItems = pageData.table.totalitems;
 	content.className = pageName;
 	var table = document.createElement('table');
 
 	// Makes table body
-	table.appendChild(document.createElement('tr'));
+	var dummyTableHead = document.createElement('tr');
+	for (var i = 0; i < pageData.table.columns.length; i++) {
+		var td = document.createElement('td');
+		td.innerHTML = pageData.table.columns[i].name;
+		dummyTableHead.appendChild(td);
+	}
+	table.appendChild(dummyTableHead);
 	for (var i = 0; i < pageData.table.data.length; i++) {
 		var tr = document.createElement('tr');
 		for (var j = 0; j < pageData.table.columns.length; j++) {
@@ -195,7 +218,7 @@ function loadPage(pageName, searchQuery, sortingBy = "", pageNumber = 1, results
 			var td = document.createElement('td');
 			td.appendChild(checkbox);
 			var trows = table.getElementsByTagName('tr');
-			for (var j = 1; j < trows.length; j++) {
+			for (var j = 0; j < trows.length; j++) {
 				trows[j].insertBefore(td.cloneNode(true), trows[j].firstChild);
 			}
 			var div = document.createElement('div');
@@ -206,11 +229,27 @@ function loadPage(pageName, searchQuery, sortingBy = "", pageNumber = 1, results
 		}
 	}
 
+	// Makes page number selector
+	// var pageNumberContainer = document.createElement('div');
+	// pageNumberContainer.id = "page-number-container"
+	// var currentPageNumber = document.createElement('input');
+	// currentPageNumber.value = pageNumber;
+	// var previousButton = document.createElement('span');
+	// var nextButton = document.createElement('span');
+	// pageNumberContainer.appendChild(previousButton);
+	// pageNumberContainer.appendChild(currentPageNumber);
+	// var numPages = Math.ceil(totalItems / resultsPerPage);
+	// pageNumberContainer.appendChild(document.createTextNode("/ " + numPages));
+	// pageNumberContainer.appendChild(nextButton);
+
+	// Append elements
+	content.innerHTML = "";
 	content.appendChild(thead);
 	var tableContainer = document.createElement('div');
 	toggleClass(tableContainer, "table-container", true);
 	tableContainer.appendChild(table);
 	content.appendChild(tableContainer);
+	// content.appendChild(pageNumberContainer);
 
 	// Makes action buttons
 	for (var i = 0; i < pageData.actions.length; i++) {
@@ -249,7 +288,20 @@ function sortTableBy() {
 			}
 		}
 		toggleClass(this, "sorting-by", true);
-		// Do XHR
+		// If short, do local sorting, else loadPage()
+	}
+}
+
+function showLoadingOverlay() {
+	var contentLoadingOverlay = document.createElement('div');
+	contentLoadingOverlay.id = "content-loading-overlay";
+	content.appendChild(contentLoadingOverlay);
+}
+
+function hideLoadingOverlay() {
+	var contentLoadingOverlay = document.getElementById('content-loading-overlay');
+	if (contentLoadingOverlay) {
+		content.removeChild(contentLoadingOverlay);
 	}
 }
 

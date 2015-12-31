@@ -8,6 +8,10 @@
 			"attributes": ["selection"]
 		},
 		{
+			"name": "Edit",
+			"attributes": ["selection"]
+		},
+		{
 			"name": "Alert",
 			"attributes": ["selection"]
 		}
@@ -19,7 +23,7 @@
 				"attributes": ["sortingby"]
 			},
 			{
-				"name": "ID"
+				"name": "Radio ID"
 			},
 			{
 				"name": "Role",
@@ -39,7 +43,7 @@
 		"data": [
 			{
 				"name": "Greene, Adam, D",
-				"id": "1624",
+				"radio id": "1624",
 				"role": "Admin",
 				"address": "1600 Pennsylvania Ave NW, Washington, DC 20500",
 				"phone": "(202) 456-1111",
@@ -47,12 +51,21 @@
 			},
 			{
 				"name": "Gagnon, Kevin, M",
-				"id": "1625",
-				"role": "User",
-				"address": "1400 Old Tamah Rd, Irmo, SC 29063",
-				"phone": "(803) 476-3300",
+				"radio id": "1625",
+				"role": "Secretary",
+				"address": "14 East 51st Street, New York, NY 10022",
+				"phone": "(212) 753-2261",
 				"email": "kevinmgagnon@icloud.com"
+			},
+			{
+				"name": "Lindler, Barry, P",
+				"radio id": "7975",
+				"role": "Captain",
+				"address": "1400 Old Tamah Road, Irmo, SC 29063",
+				"phone": "(803) 476-3300",
+				"email": "blindler@lexrich5.org"
 			}
-		]
+		],
+		"totalitems": 3
 	}
 }

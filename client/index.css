@@ -232,6 +232,7 @@ body {
 
 	#content table tr:first-child {
 		height: 40px;
+		visibility: hidden;
 	}
 
 	#content table tr:nth-child(even) {
@@ -244,11 +245,6 @@ body {
 		line-height: 18px;
 	}
 
-	#content table td:first-child:hover {
-		cursor: pointer;
-		text-decoration: underline;
-	}
-
 	#content table td span.colordata {
 		padding: 2px 12px;
 		display: inline-block;
@@ -256,6 +252,15 @@ body {
 		background-color: #5e5e5e;
 		border-radius: 4px;
 		text-align: center;
+	}
+
+	#content-loading-overlay {
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		bottom: 0px;
+		left: 0px;
+		background-color: rgba(255, 255, 255, 0.8);
 	}
 
 	/* People */

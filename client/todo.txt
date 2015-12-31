@@ -1,0 +1,6 @@
+Print, download toolbar buttons right
+Notifications button left of name
+Help button bottom right
+legal stuff bottom middle
+Page number
+Sort dynamically: locally if short, server if long
