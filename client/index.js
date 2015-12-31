@@ -61,7 +61,7 @@ function selectRow() {
 		checked[i - 1] = tableCheckboxes[i].checked ? true : false;
 	}
 	tableCheckboxes[0].checked = checked.indexOf(false) == -1;
-	var selections = actionButtons.getElementsByClassName('selection');
+	var selections = actionButtons.querySelectorAll('.selection:not(.disabled)');
 	for (var i = 0; i < selections.length; i++) {
 		if (checked.indexOf(true) == -1) {
 			selections[i].disabled = true;
@@ -92,7 +92,7 @@ function loadPage(pageName, searchQuery, sortingBy = "", pageNumber = 1, results
 			},
 			{
 				"name": "Alert",
-				"attributes": ["selection"]
+				"attributes": ["selection", "disabled"]
 			}
 		],
 		"table": {
@@ -259,6 +259,11 @@ function loadPage(pageName, searchQuery, sortingBy = "", pageNumber = 1, results
 			toggleClass(button, "selection", true);
 			button.disabled = true;
 			button.title = "Please select at least one entry";
+		}
+		if (existsAndHas(pageData.actions[i].attributes, "disabled")) {
+			toggleClass(button, "disabled", true);
+			button.disabled = true;
+			button.title = "This action is currently unavailable";
 		}
 		actionButtons.appendChild(button);
 	}

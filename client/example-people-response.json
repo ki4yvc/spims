@@ -13,7 +13,7 @@
 		},
 		{
 			"name": "Alert",
-			"attributes": ["selection"]
+			"attributes": ["selection", "disabled"]
 		}
 	],
 	"table": {
