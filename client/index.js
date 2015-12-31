@@ -233,11 +233,7 @@ function resizeTable() {
 		var width = table.children[1].children[i].clientWidth;
 		tableHeadData[i].style.width = width + "px";
 	}
-	if (tableContainer.clientWidth < tableContainer.scrollWidth) {
-		tableHead.style.width = table.clientWidth + "px";
-	} else {
-		tableHead.style.width = "";
-	}
+	tableHead.style.width = table.clientWidth + "px";
 }
 
 function scrollTableHead() {
