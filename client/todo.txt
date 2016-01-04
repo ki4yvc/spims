@@ -1,4 +1,6 @@
 Print, download toolbar buttons right
+Add more tabs and pages
+Focus on Personnel pages
 Notifications button left of name
 Help button bottom right
 legal stuff bottom middle
