@@ -73,7 +73,7 @@ function selectRow() {
 	}
 }
 
-function loadPage(pageName, searchQuery, sortingBy = "", pageNumber = 1, resultsPerPage = 50) {
+function loadPage(pageName, searchQuery, sortingBy, pageNumber, resultsPerPage) {
 	showLoadingOverlay();
 	// Do XHR to load page data, include Customer ID and login cookie
 	// The rest assumes that it successfully loaded people
