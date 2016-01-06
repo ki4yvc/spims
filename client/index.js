@@ -77,199 +77,140 @@ function loadPage(pageName, searchQuery, sortingBy, pageNumber, resultsPerPage) 
 	showLoadingOverlay();
 	// Do XHR to load page data, include Customer ID and login cookie
 	// The rest assumes that it successfully loaded people
-	var pageData = {
-		"actions": [
-			{
-				"name": "Add Person",
-			},
-			{
-				"name": "Remove Person",
-				"attributes": ["selection"]
-			},
-			{
-				"name": "Edit",
-				"attributes": ["selection"]
-			},
-			{
-				"name": "Alert",
-				"attributes": ["selection", "disabled"]
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			var pageData = JSON.parse(xhr.responseText);
+			var totalItems = pageData.table.totalitems;
+			content.className = pageName;
+			var table = document.createElement('table');
+
+			// Makes table body
+			var dummyTableHead = document.createElement('tr');
+			for (var i = 0; i < pageData.table.columns.length; i++) {
+				var td = document.createElement('td');
+				td.innerHTML = pageData.table.columns[i].name;
+				dummyTableHead.appendChild(td);
 			}
-		],
-		"table": {
-			"columns": [
-				{
-					"name": "Name",
-					"attributes": ["sortingby"]
-				},
-				{
-					"name": "Radio ID"
-				},
-				{
-					"name": "Role",
-					"attributes": ["colorcolumn"]
-				},
-				{
-					"name": "Address",
-					"attributes": ["unsortable"]
-				},
-				{
-					"name": "Phone"
-				},
-				{
-					"name": "Email"
+			table.appendChild(dummyTableHead);
+			for (var i = 0; i < pageData.table.data.length; i++) {
+				var tr = document.createElement('tr');
+				for (var j = 0; j < pageData.table.columns.length; j++) {
+					var td = document.createElement('td');
+					td.innerHTML = pageData.table.data[i][pageData.table.columns[j].name.toLowerCase()];
+					tr.appendChild(td);
 				}
-			],
-			"data": [
-				{
-					"name": "Greene, Adam, D",
-					"radio id": "1624",
-					"role": "Admin",
-					"address": "1600 Pennsylvania Ave NW, Washington, DC 20500",
-					"phone": "(202) 456-1111",
-					"email": "greene.adam.d@gmail.com"
-				},
-				{
-					"name": "Gagnon, Kevin, M",
-					"radio id": "1625",
-					"role": "Secretary",
-					"address": "14 East 51st Street, New York, NY 10022",
-					"phone": "(212) 753-2261",
-					"email": "kevinmgagnon@icloud.com"
-				},
-				{
-					"name": "Lindler, Barry, P",
-					"radio id": "7975",
-					"role": "Captain",
-					"address": "1400 Old Tamah Road, Irmo, SC 29063",
-					"phone": "(803) 476-3300",
-					"email": "blindler@lexrich5.org"
-				}
-			],
-			"totalitems": 3
-		}
-	};
-	var totalItems = pageData.table.totalitems;
-	content.className = pageName;
-	var table = document.createElement('table');
-
-	// Makes table body
-	var dummyTableHead = document.createElement('tr');
-	for (var i = 0; i < pageData.table.columns.length; i++) {
-		var td = document.createElement('td');
-		td.innerHTML = pageData.table.columns[i].name;
-		dummyTableHead.appendChild(td);
-	}
-	table.appendChild(dummyTableHead);
-	for (var i = 0; i < pageData.table.data.length; i++) {
-		var tr = document.createElement('tr');
-		for (var j = 0; j < pageData.table.columns.length; j++) {
-			var td = document.createElement('td');
-			td.innerHTML = pageData.table.data[i][pageData.table.columns[j].name.toLowerCase()];
-			tr.appendChild(td);
-		}
-		table.appendChild(tr);
-	}
-
-	// Makes table head
-	var colorColumns = [];
-	var sorting = [];
-	var thead = document.createElement('div');
-	toggleClass(thead, "table-header", true);
-	for (var i = 0; i < pageData.table.columns.length; i++) {
-		var div = document.createElement('div');
-		var column = pageData.table.columns[i];
-		if (existsAndHas(column.attributes, "colorcolumn")) {
-			colorColumns.push(i);
-		}
-		if (existsAndHas(column.attributes, "unsortable")) {
-			sorting[i] = -1;
-			toggleClass(div, "unsortable", true);
-		} else if (existsAndHas(column.attributes, "sortingby")){
-			sorting[i] = 1;
-		} else {
-			sorting[i] = 0;
-		}
-		div.innerHTML = pageData.table.columns[i].name;
-		thead.appendChild(div);
-	}
-	if (sorting.indexOf(1) != -1) {
-		toggleClass(thead.children[sorting.indexOf(1)], "sorting-by", true);
-	} else if (sorting.indexOf(0) != -1){
-		toggleClass(thead.children[sorting.indexOf(0)], "sorting-by", true);
-	}
-
-	// Sets color data
-	for (var i = 1; i < table.children.length; i++) {
-		for (var j = 0; j < colorColumns.length; j++) {
-			var colordata = table.children[i].children[colorColumns[j]];
-			colordata.innerHTML = "<span>" + colordata.innerHTML + "</span>";
-			var span = colordata.children[0];
-			toggleClass(span, "colordata", true);
-			toggleClass(span, thead.children[colorColumns[j]].innerHTML.toLowerCase(), true);
-			toggleClass(span, span.innerHTML.toLowerCase(), true);
-		}
-	}
-
-	// Makes checkboxes
-	for (var i = 0; i < pageData.actions.length; i++) {
-		if (existsAndHas(pageData.actions[i].attributes, "selection")) {
-			var checkbox = document.createElement('input');
-			checkbox.type = "checkbox";
-			var td = document.createElement('td');
-			td.appendChild(checkbox);
-			var trows = table.getElementsByTagName('tr');
-			for (var j = 0; j < trows.length; j++) {
-				trows[j].insertBefore(td.cloneNode(true), trows[j].firstChild);
+				table.appendChild(tr);
 			}
-			var div = document.createElement('div');
-			div.appendChild(checkbox.cloneNode());
-			toggleClass(div, "unsortable", true);
-			thead.insertBefore(div, thead.firstChild);
-			break;
+
+			// Makes table head
+			var colorColumns = [];
+			var sorting = [];
+			var thead = document.createElement('div');
+			toggleClass(thead, "table-header", true);
+			for (var i = 0; i < pageData.table.columns.length; i++) {
+				var div = document.createElement('div');
+				var column = pageData.table.columns[i];
+				if (existsAndHas(column.attributes, "colorcolumn")) {
+					colorColumns.push(i);
+				}
+				if (existsAndHas(column.attributes, "unsortable")) {
+					sorting[i] = -1;
+					toggleClass(div, "unsortable", true);
+				} else if (existsAndHas(column.attributes, "sortingby")){
+					sorting[i] = 1;
+				} else {
+					sorting[i] = 0;
+				}
+				div.innerHTML = pageData.table.columns[i].name;
+				thead.appendChild(div);
+			}
+			if (sorting.indexOf(1) != -1) {
+				toggleClass(thead.children[sorting.indexOf(1)], "sorting-by", true);
+			} else if (sorting.indexOf(0) != -1){
+				toggleClass(thead.children[sorting.indexOf(0)], "sorting-by", true);
+			}
+
+			// Sets color data
+			for (var i = 1; i < table.children.length; i++) {
+				for (var j = 0; j < colorColumns.length; j++) {
+					var colordata = table.children[i].children[colorColumns[j]];
+					colordata.innerHTML = "<span>" + colordata.innerHTML + "</span>";
+					var span = colordata.children[0];
+					toggleClass(span, "colordata", true);
+					toggleClass(span, thead.children[colorColumns[j]].innerHTML.toLowerCase(), true);
+					toggleClass(span, span.innerHTML.toLowerCase(), true);
+				}
+			}
+
+			// Makes checkboxes
+			for (var i = 0; i < pageData.actions.length; i++) {
+				if (existsAndHas(pageData.actions[i].attributes, "selection")) {
+					var checkbox = document.createElement('input');
+					checkbox.type = "checkbox";
+					var td = document.createElement('td');
+					td.appendChild(checkbox);
+					var trows = table.getElementsByTagName('tr');
+					for (var j = 0; j < trows.length; j++) {
+						trows[j].insertBefore(td.cloneNode(true), trows[j].firstChild);
+					}
+					var div = document.createElement('div');
+					div.appendChild(checkbox.cloneNode());
+					toggleClass(div, "unsortable", true);
+					thead.insertBefore(div, thead.firstChild);
+					break;
+				}
+			}
+
+			// Makes page number selector
+			// var pageNumberContainer = document.createElement('div');
+			// pageNumberContainer.id = "page-number-container"
+			// var currentPageNumber = document.createElement('input');
+			// currentPageNumber.value = pageNumber;
+			// var previousButton = document.createElement('span');
+			// var nextButton = document.createElement('span');
+			// pageNumberContainer.appendChild(previousButton);
+			// pageNumberContainer.appendChild(currentPageNumber);
+			// var numPages = Math.ceil(totalItems / resultsPerPage);
+			// pageNumberContainer.appendChild(document.createTextNode("/ " + numPages));
+			// pageNumberContainer.appendChild(nextButton);
+
+			// Append elements
+			content.innerHTML = "";
+			content.appendChild(thead);
+			var tableContainer = document.createElement('div');
+			toggleClass(tableContainer, "table-container", true);
+			tableContainer.appendChild(table);
+			content.appendChild(tableContainer);
+			// content.appendChild(pageNumberContainer);
+
+			// Makes action buttons
+			actionButtons.innerHTML = "";
+			for (var i = 0; i < pageData.actions.length; i++) {
+				var button = document.createElement('button');
+				button.innerHTML = pageData.actions[i].name;
+				if (existsAndHas(pageData.actions[i].attributes, "selection")) {
+					toggleClass(button, "selection", true);
+					button.disabled = true;
+					button.title = "Please select at least one entry";
+				}
+				if (existsAndHas(pageData.actions[i].attributes, "disabled")) {
+					toggleClass(button, "disabled", true);
+					button.disabled = true;
+					button.title = "This action is currently unavailable";
+				}
+				actionButtons.appendChild(button);
+			}
+
+			setUpAfter();
+			resizeTable();
 		}
 	}
-
-	// Makes page number selector
-	// var pageNumberContainer = document.createElement('div');
-	// pageNumberContainer.id = "page-number-container"
-	// var currentPageNumber = document.createElement('input');
-	// currentPageNumber.value = pageNumber;
-	// var previousButton = document.createElement('span');
-	// var nextButton = document.createElement('span');
-	// pageNumberContainer.appendChild(previousButton);
-	// pageNumberContainer.appendChild(currentPageNumber);
-	// var numPages = Math.ceil(totalItems / resultsPerPage);
-	// pageNumberContainer.appendChild(document.createTextNode("/ " + numPages));
-	// pageNumberContainer.appendChild(nextButton);
-
-	// Append elements
-	content.innerHTML = "";
-	content.appendChild(thead);
-	var tableContainer = document.createElement('div');
-	toggleClass(tableContainer, "table-container", true);
-	tableContainer.appendChild(table);
-	content.appendChild(tableContainer);
-	// content.appendChild(pageNumberContainer);
-
-	// Makes action buttons
-	for (var i = 0; i < pageData.actions.length; i++) {
-		var button = document.createElement('button');
-		button.innerHTML = pageData.actions[i].name;
-		if (existsAndHas(pageData.actions[i].attributes, "selection")) {
-			toggleClass(button, "selection", true);
-			button.disabled = true;
-			button.title = "Please select at least one entry";
-		}
-		if (existsAndHas(pageData.actions[i].attributes, "disabled")) {
-			toggleClass(button, "disabled", true);
-			button.disabled = true;
-			button.title = "This action is currently unavailable";
-		}
-		actionButtons.appendChild(button);
-	}
-
-	setUpAfter();
-	resizeTable();
+	var params = "page=" + pageName + "&search=" + searchQuery +
+		"&sorting=" + sortingBy + "&pagenum=" + pageNumber +
+		"&rpp=" + resultsPerPage + "&no-cache=" + new Date().getTime();
+	xhr.open("GET", "page.json?" + params, true);
+	xhr.send();
 }
 
 function resizeTable() {
