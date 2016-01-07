@@ -48,6 +48,7 @@ body {
 			text-align: center;
 			z-index: 2;
 			transition: 0.5s;
+			display: inline-block;
 		}
 
 		#account-menu:hover {
@@ -284,3 +285,28 @@ body {
 		color: #404040;
 		cursor: pointer;
 	}
+
+/* Notification Button*/
+	#temp {
+		vertical-align: top;
+	}
+	#notification {
+		width: 28px;
+		height:28px;
+		font-size: 13px;
+		font-family: inherit;
+		color:white;
+		opacity: .8;
+		background-color: #005080;
+		text-align: center;
+		border-radius: 4px;
+		display: inline-block;
+		overflow: hidden;
+	}
+
+	.notification-button{
+		line-height: 16px;
+		background-color: #005080;
+		cursor: pointer;
+		transition: 0.5s;
+		}
