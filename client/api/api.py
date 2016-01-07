@@ -17,6 +17,8 @@ print("<br>")
 print(os.environ['REQUEST_METHOD'])
 print("<br>")
 print(os.environ["QUERY_STRING"])
+if os.environ["QUERY_STRING"] == "hbdk":
+	print("HAPPY BIRTHDAY KEVIN")
 print("<br>")
 for line in sys.stdin:
 	print(line)
