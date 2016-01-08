@@ -67,8 +67,17 @@ body {
 			}
 
 			/* Notification menu */
-				#notification-menu {
+				@keyframes new-notifications {
+					from {
+						color: white;
+					}
+					to {
+						color: rgba(255, 255, 255, 0.2);
+					}
+				}
 
+				#notification-menu.new {
+					animation: new-notifications 1s ease-in infinite;
 				}
 
 			/* Account menu */
