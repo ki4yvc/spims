@@ -313,3 +313,24 @@ body {
 		color: #404040;
 		cursor: pointer;
 	}
+
+	/*tab stuff*/
+	#inventory-tab{
+	}
+	.uni-tab{
+		display: inline-block;
+		padding: 6px 12px;
+		height: 28px;
+		box-sizing: border-box;
+		line-height: 16px;
+		overflow: hidden;
+		opacity: 0.8;
+		color: white;
+		background-color: #005080;
+		font-size: 13px;
+		text-align: center;
+		cursor: pointer;
+		border-radius: 4px;
+		white-space: nowrap;
+		transition: 0.5s;
+	}
