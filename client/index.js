@@ -12,12 +12,16 @@ function getPages() {
 }
 
 function setUpBefore() {
+	notificationMenu = document.getElementById('notification-menu')
 	accountMenu = document.getElementById('account-menu');
 	currentUser = document.getElementById('current-user');
 	logOutButton = document.getElementById('log-out-button');
 	actionButtons = document.getElementById('action-buttons');
 	content = document.getElementById('content');
 
+	notificationMenu.addEventListener('click', function() {
+		toggleClass(notificationMenu, 'selected');
+	});
 	currentUser.addEventListener('click', function() {
 		toggleClass(accountMenu, 'selected');
 	});

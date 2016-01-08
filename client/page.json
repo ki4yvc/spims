@@ -4,10 +4,6 @@
 			"name": "Add Person"
 		},
 		{
-			"name": "Remove Person",
-			"attributes": ["selection"]
-		},
-		{
 			"name": "Edit",
 			"attributes": ["selection"]
 		},
