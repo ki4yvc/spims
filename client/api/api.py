@@ -2,25 +2,28 @@
 import sys
 import os
 import cgi
-
-mimes = {"html": "text/html", "css": "text/css", "js": "application/javascript", "json": "application/json"}
-path = sys.argv
-
-def printContentType(mime):
-	print("Content-type:", mimes[mime], end="\n\n")
-
-printContentType("html")
-
-# testing
-print(sys.argv)
-print("<br>")
-print(os.environ['REQUEST_METHOD'])
-print("<br>")
-print(os.environ["QUERY_STRING"])
-if os.environ["QUERY_STRING"] == "hbdk":
-	print("HAPPY BIRTHDAY KEVIN")
-print("<br>")
-for line in sys.stdin:
-	print(line)
+import re
+import mimetypes
 
 # This is just an example, if you decide to use python, CGI is apparently discouraged, look into WSGI instead
+path = os.environ["REQUEST_URI"]
+qstr = ""
+if "?" in path:
+	qstr = path.split("?")[1]
+	path = path.split("?")[0]
+path = "/index.html" if path == "/" else path
+
+def printContentType():
+	mime = mimetypes.guess_type(path)[0]
+	if mime == None:
+		pass
+	print("Content-type:", mime, end="\n\n")
+
+printContentType()
+with open(".." + path, encoding = "utf8") as page:
+	pagestr = page.read()
+
+if path == "/index.html":
+	print(pagestr.format("Whitmire Rescue Squad", cid = "00000000", uid = "00000000", uname = "Adam Greene"))
+else:
+	print(pagestr)
