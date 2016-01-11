@@ -29,8 +29,8 @@ body {
 			display: flex;
 			justify-content: space-between;
 			box-sizing: border-box;
-			background-color: #009fff;
-			border-bottom: 4px solid #0077bf;
+			background-color: \(themecolor100);
+			border-bottom: 4px solid \(themecolor75);
 		}
 
 		/* Page menu */
@@ -52,7 +52,7 @@ body {
 				overflow: hidden;
 				opacity: 0.8;
 				color: white;
-				background-color: #005080;
+				background-color: \(themecolor50);
 				font-size: 13px;
 				text-align: center;
 				cursor: pointer;
@@ -162,7 +162,7 @@ body {
 				padding-left: 14px;
 				padding-right: 14px;
 				color: white;
-				background-color: #009fff;
+				background-color: \(themecolor100);
 				cursor: pointer;
 				border: none;
 			}
@@ -219,8 +219,9 @@ body {
 	#content .table-header div {
 		height: 100%;
 		display: table-cell;
-		vertical-align: middle;
 		box-sizing: border-box;
+		vertical-align: middle;
+		cursor: default;
 	}
 
 	#content .table-header div, #content table td {
