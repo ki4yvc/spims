@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>[Customer Name]</title> <!-- Title would be done dynamically by the server beforehand -->
+    <link rel="stylesheet" type="text/css" href="index.css?cid=[Customer ID]"> <!-- ?cid=[Customer ID] would be determined by the server beforehand, this allows the css to be loaded dynamically on a per customer basis -->
+	<script type="text/javascript" src="index.js?cid=[Customer ID]&uid=[User ID]"></script> <!-- ?cid=[Customer ID]&uid=[User ID] would be determined by the server beforehand, this allows the js to be loaded dynamically on a per customer basis -->
+	<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+	<meta name = "format-detection" content = "telephone=no">
+</head>
+<body>
+    <div id="header" class="no-select">
+		<img id="logo" src="customer-logos/[Customer ID].png" alt="[Customer Name]" title="[Customer Name]"> <!-- Src, alt, and title would be done dynamically by the server beforehand -->
+		<div id="page-menu" class="menu"></div>
+        <div id="account-menu" class="menu">
+			<div id="current-user" class="account-menu-button [Role]" title="User is [Role]">[User Name]</div> <!-- Position class, title, and name would be done dynamically by the server beforehand -->
+			<hr>
+			<div id="log-out-button" class="account-menu-button">Log out</div>
+		</div>
+		<div id="toolbar">
+			<form id="toolbar-search-form" onsubmit="return search()">
+				<input type="text" placeholder="Enter search query"></input>
+				<button type="submit" class="fa fa-search"></button>
+			</form>
+			<div id="action-buttons"></div>
+		</div>
+    </div>
+	<div id="content"></div>
+</body>
+</html>
