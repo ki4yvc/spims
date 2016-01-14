@@ -1,4 +1,4 @@
-#!/home/dekann/Python-3.5.1/python
+#!C:/Users/adgreene/AppData/Local/Programs/Python/Python35-32/python.exe
 import sys
 import os
 import cgi
@@ -13,7 +13,7 @@ pageVars = {
 	"cname": "Whitmire Rescue Squad",
 	"cid": "00000000",
 	"uid": "00000000",
-	"uname": "David Andrews Jr.",
+	"uname": "Adam Greene",
 	"themecolor100": "#009fff",
 	"themecolor75": "#0077bf",
 	"themecolor50": "#005080"
