@@ -1,49 +1,62 @@
 {
-	"actions": [
-		{
-			"name": "Add Person"
+	"info": {
+		"buttons": {
+			"actives": [
+				{
+					"name": "Add Person"
+				},
+				{
+					"name": "Edit",
+					"attributes": ["selection"]
+				},
+				{
+					"name": "Alert",
+					"attributes": ["selection", "disabled"]
+				}
+			],
+			"passives": [
+				{
+					"name": "Download"
+				},
+				{
+					"name": "Print"
+				}
+			]
 		},
-		{
-			"name": "Edit",
-			"attributes": ["selection"]
-		},
-		{
-			"name": "Alert",
-			"attributes": ["selection", "disabled"]
-		}
-	],
-	"table": {
 		"columns": [
-			{
-				"name": "Name",
-				"attributes": ["sortingby"]
-			},
-			{
-				"name": "Radio ID"
-			},
-			{
-				"name": "Role",
-				"attributes": ["colorcolumn"]
-			},
-			{
-				"name": "Address",
-				"attributes": ["unsortable"]
-			},
-			{
-				"name": "Phone"
-			},
-			{
-				"name": "Email"
-			}
-		],
-		"data": [
+				{
+					"name": "Name",
+					"attributes": ["sortingby"]
+				},
+				{
+					"name": "Radio ID"
+				},
+				{
+					"name": "Role",
+					"attributes": ["colorcolumn"]
+				},
+				{
+					"name": "Address",
+					"attributes": ["unsortable"]
+				},
+				{
+					"name": "Phone"
+				},
+				{
+					"name": "Email"
+				}
+		]
+	},
+	"data": {
+		"table": [
 			{
 				"name": "Greene, Adam, D",
 				"radio id": "1624",
 				"role": "Admin",
 				"address": "1600 Pennsylvania Ave NW, Washington, DC 20500",
 				"phone": "(202) 456-1111",
-				"email": "greene.adam.d@gmail.com"
+				"email": "greene.adam.d@gmail.com",
+				"objid": "c659deb6"
 			},
 			{
 				"name": "Gagnon, Kevin, M",
@@ -51,7 +64,8 @@
 				"role": "Secretary",
 				"address": "14 East 51st Street, New York, NY 10022",
 				"phone": "(212) 753-2261",
-				"email": "kevinmgagnon@icloud.com"
+				"email": "kevinmgagnon@icloud.com",
+				"objid": "dc7083b7"
 			},
 			{
 				"name": "Lindler, Barry, P",
@@ -59,7 +73,8 @@
 				"role": "Captain",
 				"address": "1400 Old Tamah Road, Irmo, SC 29063",
 				"phone": "(803) 476-3300",
-				"email": "blindler@lexrich5.org"
+				"email": "blindler@lexrich5.org",
+				"objid": "244a2094"
 			}
 		],
 		"totalitems": 3

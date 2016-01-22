@@ -9,15 +9,7 @@ import mimetypes
 path = os.environ["REQUEST_URI"]
 qstr = ""
 
-pageVars = {
-	"cname": "Whitmire Rescue Squad",
-	"cid": "00000000",
-	"uid": "00000000",
-	"uname": "Adam Greene",
-	"themecolor100": "#009fff",
-	"themecolor75": "#0077bf",
-	"themecolor50": "#005080"
-}
+pageVars = {}
 
 if "?" in path:
 	qstr = path.split("?")[1]
@@ -30,6 +22,27 @@ def printContentType():
 		pass
 	print("Content-type:", mime, end="\n\n")
 
+def darkenLighten(rgb, percent):
+	rgb = re.findall("\d+", rgb)
+	newRGB = "rgb("
+	for i in range(3):
+		color = int(int(rgb[i]) * (1 + percent))
+		color = 255 if color > 255 else 0 if color < 0 else color
+		newRGB += str(color) + ", "
+	return newRGB[:-2] + ")"
+
+def getPageVars():
+	global pageVars
+	pageVars = {
+		"cname": "Whitmire Rescue Squad",
+		"cid": "00000000",
+		"uid": "00000000",
+		"uname": "Adam Greene",
+		"themecolor100": "rgb(0, 159, 255)"
+	}
+	pageVars["themecolor75"] = darkenLighten(pageVars["themecolor100"], -0.25)
+	pageVars["themecolor50"] = darkenLighten(pageVars["themecolor100"], -0.5)
+
 def fillPage(match):
 	var = match.group(0)[2:-1]
 	return pageVars[var]
@@ -37,6 +50,6 @@ def fillPage(match):
 printContentType()
 with open(".." + path) as page:
 	pagestr = page.read()
+getPageVars()
 pagestr = re.sub(r"\\\(.*?\)", fillPage, pagestr)
-
 print(pagestr)

@@ -1,3 +1,5 @@
+var user = "";
+var password = "";
 var pages = [];
 
 window.onload = function() {
@@ -16,7 +18,7 @@ function setUpBefore() {
 	accountMenu = document.getElementById('account-menu');
 	currentUser = document.getElementById('current-user');
 	logOutButton = document.getElementById('log-out-button');
-	actionButtons = document.getElementById('action-buttons');
+	activeButtons = document.getElementById('active-buttons');
 	content = document.getElementById('content');
 
 	notificationMenu.addEventListener('click', function() {
@@ -29,10 +31,7 @@ function setUpBefore() {
 }
 
 function setUpAfter() {
-	tableHead = content.getElementsByClassName('table-header')[0];
 	tableHeadData = tableHead.getElementsByTagName('div');
-	tableContainer = content.getElementsByClassName('table-container')[0];
-	table = content.getElementsByTagName('table')[0];
 	tableCheckboxes = content.querySelectorAll('input[type="checkbox"]');
 	tableCheckboxes = Array.prototype.slice.call(tableCheckboxes);
 	tableCheckboxes.splice(1, 1);
@@ -65,7 +64,7 @@ function selectRow() {
 		checked[i - 1] = tableCheckboxes[i].checked ? true : false;
 	}
 	tableCheckboxes[0].checked = checked.indexOf(false) == -1;
-	var selections = actionButtons.querySelectorAll('.selection:not(.disabled)');
+	var selections = activeButtons.querySelectorAll('.selection:not(.disabled)');
 	for (var i = 0; i < selections.length; i++) {
 		if (checked.indexOf(true) == -1) {
 			selections[i].disabled = true;
@@ -85,54 +84,68 @@ function loadPage(pageName, searchQuery, sortingBy, pageNumber, resultsPerPage) 
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			var pageData = JSON.parse(xhr.responseText);
-			var totalItems = pageData.table.totalitems;
 			content.className = pageName;
-			var table = document.createElement('table');
+			table = document.createElement('table');
 
 			// Makes table body
 			var dummyTableHead = document.createElement('tr');
-			for (var i = 0; i < pageData.table.columns.length; i++) {
+			for (var i = 0; i < pageData.info.columns.length; i++) {
 				var td = document.createElement('td');
-				td.innerHTML = pageData.table.columns[i].name;
+				if (existsAndHas(pageData.info.columns[i].attributes, "unsortable")) {
+					toggleClass(td, "unsortable", true);
+				}
+				td.innerHTML = pageData.info.columns[i].name;
 				dummyTableHead.appendChild(td);
 			}
 			table.appendChild(dummyTableHead);
-			for (var i = 0; i < pageData.table.data.length; i++) {
+			for (var i = 0; i < pageData.data.table.length; i++) {
 				var tr = document.createElement('tr');
-				for (var j = 0; j < pageData.table.columns.length; j++) {
+				for (var j = 0; j < pageData.info.columns.length; j++) {
 					var td = document.createElement('td');
-					td.innerHTML = pageData.table.data[i][pageData.table.columns[j].name.toLowerCase()];
+					td.innerHTML = pageData.data.table[i][pageData.info.columns[j].name.toLowerCase()];
 					tr.appendChild(td);
 				}
 				table.appendChild(tr);
 			}
 
-			// Makes table head
-			var colorColumns = [];
-			var sorting = [];
-			var thead = document.createElement('div');
-			toggleClass(thead, "table-header", true);
-			for (var i = 0; i < pageData.table.columns.length; i++) {
-				var div = document.createElement('div');
-				var column = pageData.table.columns[i];
-				if (existsAndHas(column.attributes, "colorcolumn")) {
-					colorColumns.push(i);
-				}
-				if (existsAndHas(column.attributes, "unsortable")) {
-					sorting[i] = -1;
-					toggleClass(div, "unsortable", true);
-				} else if (existsAndHas(column.attributes, "sortingby")){
-					sorting[i] = 1;
-				} else {
-					sorting[i] = 0;
-				}
-				div.innerHTML = pageData.table.columns[i].name;
-				thead.appendChild(div);
+			if (typeof tableContainer == undefined) {
+				content.removeChild(tableContainer);
 			}
-			if (sorting.indexOf(1) != -1) {
-				toggleClass(thead.children[sorting.indexOf(1)], "sorting-by", true);
-			} else if (sorting.indexOf(0) != -1){
-				toggleClass(thead.children[sorting.indexOf(0)], "sorting-by", true);
+
+			if (pageInfo) {
+				// Makes table head
+				colorColumns = [];
+				var sorting = [];
+				tableHead = document.createElement('div');
+				toggleClass(tableHead, "table-header", true);
+				for (var i = 0; i < pageData.info.columns.length; i++) {
+					var div = document.createElement('div');
+					var column = pageData.info.columns[i];
+					if (existsAndHas(column.attributes, "colorcolumn")) {
+						colorColumns.push(i);
+					}
+					if (existsAndHas(column.attributes, "unsortable")) {
+						sorting[i] = -1;
+						toggleClass(div, "unsortable", true);
+					} else if (existsAndHas(column.attributes, "sortingby")){
+						sorting[i] = 1;
+					} else {
+						sorting[i] = 0;
+					}
+					div.innerHTML = pageData.info.columns[i].name;
+					tableHead.appendChild(div);
+				}
+				if (sorting.indexOf(1) != -1) {
+					toggleClass(tableHead.children[sorting.indexOf(1)], "sorting-by", true);
+				} else if (sorting.indexOf(0) != -1){
+					toggleClass(tableHead.children[sorting.indexOf(0)], "sorting-by", true);
+				}
+				content.appendChild(tableHead);
+
+				tableContainer = document.createElement('div');
+				tableContainer.appendChild(table);
+				toggleClass(tableContainer, "table-container", true);
+				content.appendChild(tableContainer);
 			}
 
 			// Sets color data
@@ -142,31 +155,40 @@ function loadPage(pageName, searchQuery, sortingBy, pageNumber, resultsPerPage) 
 					colordata.innerHTML = "<span>" + colordata.innerHTML + "</span>";
 					var span = colordata.children[0];
 					toggleClass(span, "colordata", true);
-					toggleClass(span, thead.children[colorColumns[j]].innerHTML.toLowerCase(), true);
+					toggleClass(span, titleToDash(pageData.info.columns[colorColumns[j]].name), true);
 					toggleClass(span, span.innerHTML.toLowerCase(), true);
 				}
 			}
 
 			// Makes checkboxes
-			for (var i = 0; i < pageData.actions.length; i++) {
-				if (existsAndHas(pageData.actions[i].attributes, "selection")) {
+			for (var i = 0; i < pageData.info.buttons.actives.length; i++) {
+				if (existsAndHas(pageData.info.buttons.actives[i].attributes, "selection")) {
 					var checkbox = document.createElement('input');
 					checkbox.type = "checkbox";
 					var td = document.createElement('td');
+					toggleClass(td, "checkcol", true);
 					td.appendChild(checkbox);
 					var trows = table.getElementsByTagName('tr');
 					for (var j = 0; j < trows.length; j++) {
-						trows[j].insertBefore(td.cloneNode(true), trows[j].firstChild);
+						var clone = td.cloneNode(true);
+						if (j == 0) {
+							toggleClass(clone, "unsortable", true);
+						}
+						trows[j].insertBefore(clone, trows[j].firstChild);
 					}
-					var div = document.createElement('div');
-					div.appendChild(checkbox.cloneNode());
-					toggleClass(div, "unsortable", true);
-					thead.insertBefore(div, thead.firstChild);
+					if (pageInfo) {
+						var div = document.createElement('div');
+						toggleClass(div, "checkcol", true);
+						div.appendChild(checkbox.cloneNode());
+						toggleClass(div, "unsortable", true);
+						tableHead.insertBefore(div, tableHead.firstChild);
+					}
 					break;
 				}
 			}
 
 			// Makes page number selector
+			// var totalItems = pageData.data.totalitems;
 			// var pageNumberContainer = document.createElement('div');
 			// pageNumberContainer.id = "page-number-container"
 			// var currentPageNumber = document.createElement('input');
@@ -178,41 +200,37 @@ function loadPage(pageName, searchQuery, sortingBy, pageNumber, resultsPerPage) 
 			// var numPages = Math.ceil(totalItems / resultsPerPage);
 			// pageNumberContainer.appendChild(document.createTextNode("/ " + numPages));
 			// pageNumberContainer.appendChild(nextButton);
-
-			// Append elements
-			content.innerHTML = "";
-			content.appendChild(thead);
-			var tableContainer = document.createElement('div');
-			toggleClass(tableContainer, "table-container", true);
-			tableContainer.appendChild(table);
-			content.appendChild(tableContainer);
 			// content.appendChild(pageNumberContainer);
 
-			// Makes action buttons
-			actionButtons.innerHTML = "";
-			for (var i = 0; i < pageData.actions.length; i++) {
-				var button = document.createElement('button');
-				button.innerHTML = pageData.actions[i].name;
-				if (existsAndHas(pageData.actions[i].attributes, "selection")) {
-					toggleClass(button, "selection", true);
-					button.disabled = true;
-					button.title = "Please select at least one entry";
+			if (pageInfo) {
+				// Makes active buttons
+				activeButtons.innerHTML = "";
+				for (var i = 0; i < pageData.info.buttons.actives.length; i++) {
+					var button = document.createElement('button');
+					button.innerHTML = pageData.info.buttons.actives[i].name;
+					if (existsAndHas(pageData.info.buttons.actives[i].attributes, "selection")) {
+						toggleClass(button, "selection", true);
+						button.disabled = true;
+						button.title = "Please select at least one entry";
+					}
+					if (existsAndHas(pageData.info.buttons.actives[i].attributes, "disabled")) {
+						toggleClass(button, "disabled", true);
+						button.disabled = true;
+						button.title = "This action is currently unavailable";
+					}
+					activeButtons.appendChild(button);
 				}
-				if (existsAndHas(pageData.actions[i].attributes, "disabled")) {
-					toggleClass(button, "disabled", true);
-					button.disabled = true;
-					button.title = "This action is currently unavailable";
-				}
-				actionButtons.appendChild(button);
 			}
-
+			hideLoadingOverlay();
 			setUpAfter();
 			resizeTable();
 		}
 	}
-	var params = "page=" + pageName + "&search=" + searchQuery +
+	var pageInfo = content.className == pageName ? false : true
+	var params = "user=" + user + "&password=" + password + "&page=" + pageName +
+		"&pageinfo=" + pageInfo + "&search=" + searchQuery +
 		"&sorting=" + sortingBy + "&pagenum=" + pageNumber +
-		"&rpp=" + resultsPerPage + "&no-cache=" + new Date().getTime();
+		"&rpp=" + resultsPerPage + "&nocache=" + new Date().getTime();
 	xhr.open("GET", "page.json?" + params, true);
 	xhr.send();
 }
@@ -274,6 +292,11 @@ function existsAndHas (array, element) {
 		return array.indexOf(element) != -1;
 	}
 	return false;
+}
+
+function titleToDash(title) {
+	var dashed = title.toLowerCase().replace(/\s/, "-");
+	return dashed;
 }
 
 function search() {

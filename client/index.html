@@ -10,12 +10,7 @@
 <body>
     <div id="header" class="no-select">
 		<div id="top-bar">
-			<div id="page-menu">
-				<div id="inventory-tab" class="uni-tab">Inventory</div>
-				<div id="equipment-tab" class="uni-tab">Equipment</div>
-				<div id="apparatus-tab" class="uni-tab">Apparatus</div>
-				<div id="personnel-tab" class="uni-tab">Personnel</div>
-			</div>
+			<div id="page-menu"></div>
 			<div id="user-area">
 				<div id="notification-menu" class="menu-button"><span class="fa fa-bell"></span></div>
 				<div id="account-menu" class="menu-button">
@@ -27,12 +22,13 @@
 		</div>
 		<div id="toolbar">
 			<form id="toolbar-search-form" onsubmit="return search()">
-				<input type="text" placeholder="Enter search query"></input><button type="submit" class="fa fa-search"></button>
+				<input type="text" placeholder="Enter search query"><button type="submit" class="fa fa-search"></button>
 			</form>
-			<div id="action-buttons"></div>
+			<div id="active-buttons"></div>
+			<div id="passive-buttons"></div>
 		</div>
     </div>
 	<div id="content"></div>
-	<div id="help-button" title="Help"><span class="fa fa-question-circle"></span></div>
+	<a id="help-button" class="fa fa-question-circle" href="/spims/help" title="Help"></a>
 </body>
 </html>
