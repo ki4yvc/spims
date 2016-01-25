@@ -15,6 +15,7 @@ if "?" in path:
 	qstr = path.split("?")[1]
 	path = path.split("?")[0]
 if path == "/": path = "/index.html"
+elif path == "/api/getpage": path = "/page.json"
 
 def printContentType():
 	mime = mimetypes.guess_type(path)[0]
@@ -38,14 +39,16 @@ def getPageVars():
 		"cid": "00000000",
 		"uid": "00000000",
 		"uname": "Adam Greene",
-		"themecolor100": "rgb(0, 159, 255)"
+		"themecolor": "rgb(0, 159, 255)"
 	}
-	pageVars["themecolor75"] = darkenLighten(pageVars["themecolor100"], -0.25)
-	pageVars["themecolor50"] = darkenLighten(pageVars["themecolor100"], -0.5)
 
 def fillPage(match):
-	var = match.group(0)[2:-1]
-	return pageVars[var]
+	key = match.group(0)[2:-1]
+	if ":" in key:
+		key = key.split(":")
+		return darkenLighten(pageVars[key[0]], float(key[1]))
+	else:
+		return pageVars[key]
 
 printContentType()
 with open(".." + path) as page:

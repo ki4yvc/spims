@@ -1,82 +1,50 @@
 {
-	"info": {
-		"buttons": {
-			"actives": [
-				{
-					"name": "Add Person"
-				},
-				{
-					"name": "Edit",
-					"attributes": ["selection"]
-				},
-				{
-					"name": "Alert",
-					"attributes": ["selection", "disabled"]
-				}
-			],
-			"passives": [
-				{
-					"name": "Download"
-				},
-				{
-					"name": "Print"
-				}
-			]
-		},
-		"columns": [
-				{
-					"name": "Name",
-					"attributes": ["sortingby"]
-				},
-				{
-					"name": "Radio ID"
-				},
-				{
-					"name": "Role",
-					"attributes": ["colorcolumn"]
-				},
-				{
-					"name": "Address",
-					"attributes": ["unsortable"]
-				},
-				{
-					"name": "Phone"
-				},
-				{
-					"name": "Email"
-				}
-		]
-	},
-	"data": {
-		"table": [
-			{
-				"name": "Greene, Adam, D",
-				"radio id": "1624",
-				"role": "Admin",
-				"address": "1600 Pennsylvania Ave NW, Washington, DC 20500",
-				"phone": "(202) 456-1111",
-				"email": "greene.adam.d@gmail.com",
-				"objid": "c659deb6"
-			},
-			{
-				"name": "Gagnon, Kevin, M",
-				"radio id": "1625",
-				"role": "Secretary",
-				"address": "14 East 51st Street, New York, NY 10022",
-				"phone": "(212) 753-2261",
-				"email": "kevinmgagnon@icloud.com",
-				"objid": "dc7083b7"
-			},
-			{
-				"name": "Lindler, Barry, P",
-				"radio id": "7975",
-				"role": "Captain",
-				"address": "1400 Old Tamah Road, Irmo, SC 29063",
-				"phone": "(803) 476-3300",
-				"email": "blindler@lexrich5.org",
-				"objid": "244a2094"
-			}
+	"info": [
+		[
+			["Add Person"],
+			["Edit", ["selection"]],
+			["Alert", ["selection", "disabled"]]
 		],
-		"totalitems": 3
-	}
+		[
+			["Name", ["sortingby"]],
+			["Radio ID"],
+			["Role", ["colorcolumn"]],
+			["Address", ["unsortable"]],
+			["Phone"],
+			["Email"]
+		],
+		["objid", "name", "radio id", "role", "address", "phone", "email"]
+	],
+	"data": [
+		[
+			[
+				"c659deb6",
+				"Greene, Adam, D",
+				"1624",
+				"Admin",
+				"1600 Pennsylvania Ave NW, Washington, DC 20500",
+				"(202) 456-1111",
+				"greene.adam.d@gmail.com"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevinmgagnon@icloud.com"
+			],
+			[
+				"244a2094",
+				"Lindler, Barry, P",
+				"7975",
+				"Captain",
+				"1400 Old Tamah Road, Irmo, SC 29063",
+				"(803) 476-3300",
+				"blindler@lexrich5.org"
+			]
+		],
+		3
+	]
 }

@@ -29,8 +29,8 @@ body {
 			display: flex;
 			justify-content: space-between;
 			box-sizing: border-box;
-			background-color: \(themecolor100);
-			border-bottom: 4px solid \(themecolor75);
+			background-color: \(themecolor);
+			border-bottom: 4px solid \(themecolor:-0.25);
 		}
 
 		/* Page menu */
@@ -51,7 +51,7 @@ body {
 				overflow: hidden;
 				opacity: 0.8;
 				color: white;
-				background-color: \(themecolor50);
+				background-color: \(themecolor:-0.5);
 				font-size: 13px;
 				text-align: center;
 				cursor: pointer;
@@ -101,13 +101,13 @@ body {
 					height: 1px;
 					display: block;
 					border: none;
-					background-color: #003f66;
+					background-color: \(themecolor:-0.6);
 				}
 
-				#current-user.admin:hover {
+				/*#current-user.admin:hover {
 					background-color: #00bda7;
 					transition: 0.25s;
-				}
+				}*/
 
 				#log-out-button:hover {
 					background-color: #bf0000;
@@ -162,7 +162,7 @@ body {
 				padding-left: 14px;
 				padding-right: 14px;
 				color: white;
-				background-color: \(themecolor100);
+				background-color: \(themecolor);
 				cursor: pointer;
 				border: none;
 			}
@@ -172,24 +172,24 @@ body {
 			}
 
 			#toolbar button:active {
-				background-color: #008ee6;
+				background-color: \(themecolor:-0.1);
 			}
 
-			/* Active buttons */
-				#active-buttons {
+			/* Action buttons */
+				#action-buttons {
 					display: inline;
 					margin-left: 24px;
 				}
 
-				#active-buttons button {
+				#action-buttons button {
 					font-family: inherit;
 					border-radius: 4px;
 				}
 
-				#active-buttons button:nth-child(n+2) {
+				#action-buttons button:nth-child(n+2) {
 					margin-left: 4px;
 				}
-				#active-buttons button[disabled] {
+				#action-buttons button[disabled] {
 					opacity: 0.4;
 					cursor: default;
 				}
@@ -236,7 +236,7 @@ body {
 		cursor: pointer;
 	}
 
-	#content .table-header div:not(.unsortable)::after, #content table tr:first-child td:not(.unsortable)::after {
+	#content .table-header div:not(.unsortable)::after, #content table tr.dummy-table-header td:not(.unsortable)::after {
 		content: " \f0d7";
 		color: rgba(0, 0, 0, 0);
 		font-family: FontAwesome;
@@ -264,7 +264,7 @@ body {
 		border-collapse: collapse;
 	}
 
-	#content table tr:first-child {
+	#content table tr.dummy-table-header {
 		height: 40px;
 		font-size: 16px;
 		visibility: hidden;
@@ -280,17 +280,18 @@ body {
 		line-height: 18px;
 	}
 
-	#content table td span.colordata {
+	/*#content table td span.colordata {
 		padding: 2px 12px;
 		display: inline-block;
 		color: white;
 		background-color: #5e5e5e;
 		border-radius: 4px;
 		text-align: center;
-	}
+	}*/
 
-	#content-loading-overlay {
+	.overlay {
 		position: absolute;
+		z-index: 1;
 		top: 0px;
 		right: 0px;
 		bottom: 0px;
@@ -298,10 +299,22 @@ body {
 		background-color: rgba(255, 255, 255, 0.8);
 	}
 
+	.overlay.dark {
+		background-color: rgba(0, 0, 0, 0.8);
+	}
+
+	.overlay div {
+		margin: 200px auto 0px;
+	}
+
 	/* People */
-		#content.people table td span.colordata.role.admin {
+		/*#content.people table td span.colordata.role.admin {
 			background-color: #00bda7;
 		}
+
+		#content.people table td span.colordata.role.captain {
+			background-color: #00bda7;
+		}*/
 
 /* Help button */
 	#help-button {

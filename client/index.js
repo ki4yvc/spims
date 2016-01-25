@@ -5,7 +5,7 @@ var pages = [];
 window.onload = function() {
 	getPages();
 	setUpBefore();
-	loadPage(pages[0]);
+	loadPage(pages[0], true, true);
 }
 
 function getPages() {
@@ -18,7 +18,7 @@ function setUpBefore() {
 	accountMenu = document.getElementById('account-menu');
 	currentUser = document.getElementById('current-user');
 	logOutButton = document.getElementById('log-out-button');
-	activeButtons = document.getElementById('active-buttons');
+	actionButtons = document.getElementById('action-buttons');
 	content = document.getElementById('content');
 
 	notificationMenu.addEventListener('click', function() {
@@ -31,11 +31,14 @@ function setUpBefore() {
 }
 
 function setUpAfter() {
-	tableHeadData = tableHead.getElementsByTagName('div');
+	tableHeadData = tableHeader.getElementsByTagName('div');
 	tableCheckboxes = content.querySelectorAll('input[type="checkbox"]');
 	tableCheckboxes = Array.prototype.slice.call(tableCheckboxes);
 	tableCheckboxes.splice(1, 1);
 
+	for (var i = 0; i < actionButtons.children.length; i++) {
+		actionButtons.children[i].addEventListener('click', actionButtonPressed);
+	}
 	for (var i = 0; i < tableHeadData.length; i++) {
 		if (!existsAndHas(tableHeadData[i].className, "unsortable")) {
 			tableHeadData[i].addEventListener('click', sortTableBy);
@@ -49,9 +52,13 @@ function setUpAfter() {
 	tableContainer.onscroll = scrollTableHead;
 }
 
+function actionButtonPressed() {
+	console.log(this);
+}
+
 function selectRow() {
 	var checked = [];
-	if (tableHead.contains(this)) {
+	if (tableHeader.contains(this)) {
 		for (var i = 0; i < tableCheckboxes.length; i++) {
 			tableCheckboxes[i].checked = this.checked;
 		}
@@ -64,7 +71,7 @@ function selectRow() {
 		checked[i - 1] = tableCheckboxes[i].checked ? true : false;
 	}
 	tableCheckboxes[0].checked = checked.indexOf(false) == -1;
-	var selections = activeButtons.querySelectorAll('.selection:not(.disabled)');
+	var selections = actionButtons.querySelectorAll('.selection:not(.disabled)');
 	for (var i = 0; i < selections.length; i++) {
 		if (checked.indexOf(true) == -1) {
 			selections[i].disabled = true;
@@ -76,93 +83,130 @@ function selectRow() {
 	}
 }
 
-function loadPage(pageName, searchQuery, sortingBy, pageNumber, resultsPerPage) {
-	showLoadingOverlay();
-	// Do XHR to load page data, include Customer ID and login cookie
-	// The rest assumes that it successfully loaded people
-	var xhr = new XMLHttpRequest();
-	xhr.onreadystatechange = function() {
-		if (xhr.readyState == 4 && xhr.status == 200) {
-			var pageData = JSON.parse(xhr.responseText);
+function loadPage(pageName, pageInfo, searchQuery, sortingBy, pageNumber, resultsPerPage) {
+	var overlay = showOverlay(content, false);
+	var params = generateQueryString([
+		["user", user],
+		["password", password],
+		["page", pageName],
+		["pageinfo", pageInfo],
+		["search", searchQuery],
+		["sorting", sortingBy],
+		["pagenum", pageNumber],
+		["rpp", resultsPerPage]
+	], true);
+	var req = xhr("api/getpage", "GET", params)
+	req.onreadystatechange = function() {
+		if (req.readyState == 4 && req.status == 200) {
+			var pageJSON = JSON.parse(req.responseText);
 			content.className = pageName;
+			if (pageInfo) {
+				info = pageJSON.info;
+				actions = info[0];
+				columns = info[1];
+				properties = info[2];
+			}
+			data = pageJSON.data;
+			var items = data[0];
+			var itemsInDB = data[1];
+
 			table = document.createElement('table');
 
-			// Makes table body
-			var dummyTableHead = document.createElement('tr');
-			for (var i = 0; i < pageData.info.columns.length; i++) {
-				var td = document.createElement('td');
-				if (existsAndHas(pageData.info.columns[i].attributes, "unsortable")) {
-					toggleClass(td, "unsortable", true);
-				}
-				td.innerHTML = pageData.info.columns[i].name;
-				dummyTableHead.appendChild(td);
-			}
-			table.appendChild(dummyTableHead);
-			for (var i = 0; i < pageData.data.table.length; i++) {
-				var tr = document.createElement('tr');
-				for (var j = 0; j < pageData.info.columns.length; j++) {
+			if (pageInfo) {
+				// Makes table head
+				// colorColumns = [];
+				var sorting = [];
+				tableHeader = document.createElement('div');
+				toggleClass(tableHeader, "table-header", true);
+				var dummyTableHeader = document.createElement('tr');
+				toggleClass(dummyTableHeader, "dummy-table-header", true);
+				for (var i = 0; i < columns.length; i++) {
+					var div = document.createElement('div');
 					var td = document.createElement('td');
-					td.innerHTML = pageData.data.table[i][pageData.info.columns[j].name.toLowerCase()];
+					var column = columns[i];
+					var name = column[0];
+					var attributes = column[1];
+					// if (existsAndHas(attributes, "colorcolumn")) {
+					// 	colorColumns.push(i);
+					// }
+					if (existsAndHas(attributes, "unsortable")) {
+						sorting[i] = -1;
+						toggleClass(div, "unsortable", true);
+						toggleClass(td, "unsortable", true);
+					} else if (existsAndHas(attributes, "sortingby")){
+						sorting[i] = 1;
+					} else {
+						sorting[i] = 0;
+					}
+					div.innerHTML = name;
+					td.innerHTML = name;
+					tableHeader.appendChild(div);
+					dummyTableHeader.appendChild(td);
+				}
+				if (sorting.indexOf(1) != -1) {
+					toggleClass(tableHeader.children[sorting.indexOf(1)], "sorting-by", true);
+				} else if (sorting.indexOf(0) != -1){
+					toggleClass(tableHeader.children[sorting.indexOf(0)], "sorting-by", true);
+				}
+				content.appendChild(tableHeader);
+				table.appendChild(dummyTableHeader);
+				if (typeof tableContainer == undefined) {
+					content.removeChild(tableContainer);
+				}
+				tableContainer = document.createElement('div');
+				tableContainer.appendChild(table);
+				toggleClass(tableContainer, "table-container", true);
+				content.appendChild(tableContainer);
+
+				// Makes action buttons
+				actionButtons.innerHTML = "";
+				for (var i = 0; i < actions.length; i++) {
+					var name = actions[i][0];
+					var attributes = actions[i][1];
+					var button = document.createElement('button');
+					button.innerHTML = name;
+					if (existsAndHas(attributes, "selection")) {
+						toggleClass(button, "selection", true);
+						button.disabled = true;
+						button.title = "Please select at least one entry";
+					}
+					if (existsAndHas(attributes, "disabled")) {
+						toggleClass(button, "disabled", true);
+						button.disabled = true;
+						button.title = "This action is currently unavailable";
+					}
+					actionButtons.appendChild(button);
+				}
+			}
+
+			// Makes table body
+			for (var i = 0; i < items.length; i++) {
+				var tr = document.createElement('tr');
+				for (var j = 0; j < columns.length; j++) {
+					var td = document.createElement('td');
+					var indexOfColName = properties.indexOf(columns[j][0].toLowerCase());
+					td.innerHTML = items[i][indexOfColName];
 					tr.appendChild(td);
 				}
 				table.appendChild(tr);
 			}
 
-			if (typeof tableContainer == undefined) {
-				content.removeChild(tableContainer);
-			}
-
-			if (pageInfo) {
-				// Makes table head
-				colorColumns = [];
-				var sorting = [];
-				tableHead = document.createElement('div');
-				toggleClass(tableHead, "table-header", true);
-				for (var i = 0; i < pageData.info.columns.length; i++) {
-					var div = document.createElement('div');
-					var column = pageData.info.columns[i];
-					if (existsAndHas(column.attributes, "colorcolumn")) {
-						colorColumns.push(i);
-					}
-					if (existsAndHas(column.attributes, "unsortable")) {
-						sorting[i] = -1;
-						toggleClass(div, "unsortable", true);
-					} else if (existsAndHas(column.attributes, "sortingby")){
-						sorting[i] = 1;
-					} else {
-						sorting[i] = 0;
-					}
-					div.innerHTML = pageData.info.columns[i].name;
-					tableHead.appendChild(div);
-				}
-				if (sorting.indexOf(1) != -1) {
-					toggleClass(tableHead.children[sorting.indexOf(1)], "sorting-by", true);
-				} else if (sorting.indexOf(0) != -1){
-					toggleClass(tableHead.children[sorting.indexOf(0)], "sorting-by", true);
-				}
-				content.appendChild(tableHead);
-
-				tableContainer = document.createElement('div');
-				tableContainer.appendChild(table);
-				toggleClass(tableContainer, "table-container", true);
-				content.appendChild(tableContainer);
-			}
-
 			// Sets color data
-			for (var i = 1; i < table.children.length; i++) {
-				for (var j = 0; j < colorColumns.length; j++) {
-					var colordata = table.children[i].children[colorColumns[j]];
-					colordata.innerHTML = "<span>" + colordata.innerHTML + "</span>";
-					var span = colordata.children[0];
-					toggleClass(span, "colordata", true);
-					toggleClass(span, titleToDash(pageData.info.columns[colorColumns[j]].name), true);
-					toggleClass(span, span.innerHTML.toLowerCase(), true);
-				}
-			}
+			// for (var i = 1; i < table.children.length; i++) {
+			// 	for (var j = 0; j < colorColumns.length; j++) {
+			// 		var colordata = table.children[i].children[colorColumns[j]];
+			// 		colordata.innerHTML = "<span>" + colordata.innerHTML + "</span>";
+			// 		var span = colordata.children[0];
+			// 		toggleClass(span, "colordata", true);
+			// 		toggleClass(span, titleToDash(pageJSON.info.columns[colorColumns[j]].name), true);
+			// 		toggleClass(span, span.innerHTML.toLowerCase(), true);
+			// 	}
+			// }
 
 			// Makes checkboxes
-			for (var i = 0; i < pageData.info.buttons.actives.length; i++) {
-				if (existsAndHas(pageData.info.buttons.actives[i].attributes, "selection")) {
+			for (var i = 0; i < actions.length; i++) {
+				var attributes = actions[i][1];
+				if (existsAndHas(attributes, "selection")) {
 					var checkbox = document.createElement('input');
 					checkbox.type = "checkbox";
 					var td = document.createElement('td');
@@ -181,14 +225,14 @@ function loadPage(pageName, searchQuery, sortingBy, pageNumber, resultsPerPage) 
 						toggleClass(div, "checkcol", true);
 						div.appendChild(checkbox.cloneNode());
 						toggleClass(div, "unsortable", true);
-						tableHead.insertBefore(div, tableHead.firstChild);
+						tableHeader.insertBefore(div, tableHeader.firstChild);
 					}
 					break;
 				}
 			}
 
 			// Makes page number selector
-			// var totalItems = pageData.data.totalitems;
+			// var totalItems = pageJSON.data.totalitems;
 			// var pageNumberContainer = document.createElement('div');
 			// pageNumberContainer.id = "page-number-container"
 			// var currentPageNumber = document.createElement('input');
@@ -202,37 +246,11 @@ function loadPage(pageName, searchQuery, sortingBy, pageNumber, resultsPerPage) 
 			// pageNumberContainer.appendChild(nextButton);
 			// content.appendChild(pageNumberContainer);
 
-			if (pageInfo) {
-				// Makes active buttons
-				activeButtons.innerHTML = "";
-				for (var i = 0; i < pageData.info.buttons.actives.length; i++) {
-					var button = document.createElement('button');
-					button.innerHTML = pageData.info.buttons.actives[i].name;
-					if (existsAndHas(pageData.info.buttons.actives[i].attributes, "selection")) {
-						toggleClass(button, "selection", true);
-						button.disabled = true;
-						button.title = "Please select at least one entry";
-					}
-					if (existsAndHas(pageData.info.buttons.actives[i].attributes, "disabled")) {
-						toggleClass(button, "disabled", true);
-						button.disabled = true;
-						button.title = "This action is currently unavailable";
-					}
-					activeButtons.appendChild(button);
-				}
-			}
-			hideLoadingOverlay();
+			hideOverlay(overlay);
 			setUpAfter();
 			resizeTable();
 		}
 	}
-	var pageInfo = content.className == pageName ? false : true
-	var params = "user=" + user + "&password=" + password + "&page=" + pageName +
-		"&pageinfo=" + pageInfo + "&search=" + searchQuery +
-		"&sorting=" + sortingBy + "&pagenum=" + pageNumber +
-		"&rpp=" + resultsPerPage + "&nocache=" + new Date().getTime();
-	xhr.open("GET", "page.json?" + params, true);
-	xhr.send();
 }
 
 function resizeTable() {
@@ -240,11 +258,11 @@ function resizeTable() {
 		var width = table.children[1].children[i].clientWidth;
 		tableHeadData[i].style.width = width + "px";
 	}
-	tableHead.style.width = table.clientWidth + "px";
+	tableHeader.style.width = table.clientWidth + "px";
 }
 
 function scrollTableHead() {
-	tableHead.style.left = "-" + tableContainer.scrollLeft + "px";
+	tableHeader.style.left = "-" + tableContainer.scrollLeft + "px";
 }
 
 function sortTableBy() {
@@ -260,29 +278,30 @@ function sortTableBy() {
 	}
 }
 
-function showLoadingOverlay() {
-	var contentLoadingOverlay = document.createElement('div');
-	contentLoadingOverlay.id = "content-loading-overlay";
-	content.appendChild(contentLoadingOverlay);
-}
-
-function hideLoadingOverlay() {
-	var contentLoadingOverlay = document.getElementById('content-loading-overlay');
-	if (contentLoadingOverlay) {
-		content.removeChild(contentLoadingOverlay);
+function showOverlay(parent, dark) {
+	var overlay = document.createElement('div');
+	toggleClass(overlay, "overlay", true);
+	if (dark) {
+		toggleClass(overlay, "dark", true);
 	}
+	parent.appendChild(overlay);
+	return overlay;
 }
 
-function toggleClass(element, className, on) {
+function hideOverlay(overlay) {
+	overlay.parentNode.removeChild(overlay);
+}
+
+function toggleClass(element, className, assert) {
 	var index = element.className.indexOf(className);
-	if (element.className == "" && on != false) {
+	if (element.className == "" && assert != false) {
 		element.className = className;
-	} else if (element.className == className && on != true) {
+	} else if (element.className == className && assert != true) {
 		element.removeAttribute("class");
-	} else if (index != -1 && on != true) {
+	} else if (index != -1 && assert != true) {
 		var newClassName = element.className.substring(0, index) + element.className.substring(index + className.length);
 		element.className = newClassName.replace(/\s+/g, " ").trim();
-	} else if (on != false) {
+	} else if (assert != false) {
 		element.className += " " + className;
 	}
 }
@@ -299,10 +318,30 @@ function titleToDash(title) {
 	return dashed;
 }
 
+function generateQueryString(params, nocache) {
+	var qstr = "?";
+	for (var i = 0; i < params.length; i++) {
+		if (i > 0) qstr += "&";
+		qstr += params[i][0] + "=" + params[i][1];
+	}
+	if (nocache) {
+		if (qstr != "?") qstr += "&";
+		qstr += "nocache=" + new Date().getTime();
+	}
+	return qstr;
+}
+
 function search() {
 	return false;
 }
 
 function logOut() {
 	// Log out
+}
+
+function xhr(rsrc, method, params, payload) {
+	var req = new XMLHttpRequest();
+	req.open(method, rsrc + params, true);
+	req.send(payload);
+	return req;
 }
