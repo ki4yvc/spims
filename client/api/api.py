@@ -9,7 +9,13 @@ import mimetypes
 path = os.environ["REQUEST_URI"]
 qstr = ""
 
-pageVars = {}
+pageVars = {
+	"cname": "Whitmire Rescue Squad",
+	"cid": "00000000",
+	"uid": "00000000",
+	"uname": "Adam Greene",
+	"themecolor": "rgb(0, 159, 255)"
+}
 
 if "?" in path:
 	qstr = path.split("?")[1]
@@ -17,11 +23,16 @@ if "?" in path:
 if path == "/": path = "/index.html"
 elif path == "/api/getpage": path = "/page.json"
 
-def printContentType():
-	mime = mimetypes.guess_type(path)[0]
-	if mime == None:
-		pass
-	print("Content-type:", mime, end="\n\n")
+def printHeaders():
+	if path.endswith(".json"): mime = "application/json"
+	else:
+		mime = mimetypes.guess_type(path[1:])[0]
+		if mime == None:
+			pass
+	print("Content-Type:", mime)
+	if path == "/page.json":
+		print("Cache-Control: no-store")
+	print()
 
 def darkenLighten(rgb, percent):
 	rgb = re.findall("\d+", rgb)
@@ -32,16 +43,6 @@ def darkenLighten(rgb, percent):
 		newRGB += str(color) + ", "
 	return newRGB[:-2] + ")"
 
-def getPageVars():
-	global pageVars
-	pageVars = {
-		"cname": "Whitmire Rescue Squad",
-		"cid": "00000000",
-		"uid": "00000000",
-		"uname": "Adam Greene",
-		"themecolor": "rgb(0, 159, 255)"
-	}
-
 def fillPage(match):
 	key = match.group(0)[2:-1]
 	if ":" in key:
@@ -50,9 +51,8 @@ def fillPage(match):
 	else:
 		return pageVars[key]
 
-printContentType()
+printHeaders()
 with open(".." + path) as page:
 	pagestr = page.read()
-getPageVars()
 pagestr = re.sub(r"\\\(.*?\)", fillPage, pagestr)
 print(pagestr)

@@ -94,7 +94,7 @@ function loadPage(pageName, pageInfo, searchQuery, sortingBy, pageNumber, result
 		["sorting", sortingBy],
 		["pagenum", pageNumber],
 		["rpp", resultsPerPage]
-	], true);
+	]);
 	var req = xhr("api/getpage", "GET", params)
 	req.onreadystatechange = function() {
 		if (req.readyState == 4 && req.status == 200) {
@@ -318,15 +318,11 @@ function titleToDash(title) {
 	return dashed;
 }
 
-function generateQueryString(params, nocache) {
+function generateQueryString(params) {
 	var qstr = "?";
 	for (var i = 0; i < params.length; i++) {
 		if (i > 0) qstr += "&";
 		qstr += params[i][0] + "=" + params[i][1];
-	}
-	if (nocache) {
-		if (qstr != "?") qstr += "&";
-		qstr += "nocache=" + new Date().getTime();
 	}
 	return qstr;
 }
