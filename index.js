@@ -2,6 +2,24 @@ var user = "";
 var password = "";
 var pages = [];
 
+var actionFuctions = {
+	"people": {
+		"Add Person": function() {
+			var overlay = showOverlay(document.body, true);
+			var params = [
+
+			];
+		},
+		"Edit": function() {
+
+		},
+		"Alert": function() {
+
+		}
+	},
+	"inventory"
+};
+
 window.onload = function() {
 	getPages();
 	setUpBefore();
@@ -103,8 +121,7 @@ function loadPage(pageName, pageInfo, searchQuery, sortingBy, pageNumber, result
 			if (pageInfo) {
 				info = pageJSON.info;
 				actions = info[0];
-				columns = info[1];
-				properties = info[2];
+				properties = info[1];
 			}
 			data = pageJSON.data;
 			var items = data[0];
@@ -114,34 +131,32 @@ function loadPage(pageName, pageInfo, searchQuery, sortingBy, pageNumber, result
 
 			if (pageInfo) {
 				// Makes table head
-				// colorColumns = [];
 				var sorting = [];
 				tableHeader = document.createElement('div');
 				toggleClass(tableHeader, "table-header", true);
 				var dummyTableHeader = document.createElement('tr');
 				toggleClass(dummyTableHeader, "dummy-table-header", true);
-				for (var i = 0; i < columns.length; i++) {
-					var div = document.createElement('div');
-					var td = document.createElement('td');
-					var column = columns[i];
-					var name = column[0];
-					var attributes = column[1];
-					// if (existsAndHas(attributes, "colorcolumn")) {
-					// 	colorColumns.push(i);
-					// }
-					if (existsAndHas(attributes, "unsortable")) {
-						sorting[i] = -1;
-						toggleClass(div, "unsortable", true);
-						toggleClass(td, "unsortable", true);
-					} else if (existsAndHas(attributes, "sortingby")){
-						sorting[i] = 1;
-					} else {
-						sorting[i] = 0;
+				for (var i = 0; i < properties.length; i++) {
+					var property = properties[i];
+					if (property[1]) {
+						var div = document.createElement('div');
+						var td = document.createElement('td');
+						var name = property[0];
+						var attributes = property[2];
+						if (existsAndHas(attributes, "unsortable")) {
+							sorting[i] = -1;
+							toggleClass(div, "unsortable", true);
+							toggleClass(td, "unsortable", true);
+						} else if (existsAndHas(attributes, "sortingby")){
+							sorting[i] = 1;
+						} else {
+							sorting[i] = 0;
+						}
+						div.innerHTML = name;
+						td.innerHTML = name;
+						tableHeader.appendChild(div);
+						dummyTableHeader.appendChild(td);
 					}
-					div.innerHTML = name;
-					td.innerHTML = name;
-					tableHeader.appendChild(div);
-					dummyTableHeader.appendChild(td);
 				}
 				if (sorting.indexOf(1) != -1) {
 					toggleClass(tableHeader.children[sorting.indexOf(1)], "sorting-by", true);
@@ -182,26 +197,15 @@ function loadPage(pageName, pageInfo, searchQuery, sortingBy, pageNumber, result
 			// Makes table body
 			for (var i = 0; i < items.length; i++) {
 				var tr = document.createElement('tr');
-				for (var j = 0; j < columns.length; j++) {
-					var td = document.createElement('td');
-					var indexOfColName = properties.indexOf(columns[j][0].toLowerCase());
-					td.innerHTML = items[i][indexOfColName];
-					tr.appendChild(td);
+				for (var j = 0; j < properties.length; j++) {
+					if (properties[i][1]) {
+						var td = document.createElement('td');
+						td.innerHTML = items[i][j];
+						tr.appendChild(td);
+					}
 				}
 				table.appendChild(tr);
 			}
-
-			// Sets color data
-			// for (var i = 1; i < table.children.length; i++) {
-			// 	for (var j = 0; j < colorColumns.length; j++) {
-			// 		var colordata = table.children[i].children[colorColumns[j]];
-			// 		colordata.innerHTML = "<span>" + colordata.innerHTML + "</span>";
-			// 		var span = colordata.children[0];
-			// 		toggleClass(span, "colordata", true);
-			// 		toggleClass(span, titleToDash(pageJSON.info.columns[colorColumns[j]].name), true);
-			// 		toggleClass(span, span.innerHTML.toLowerCase(), true);
-			// 	}
-			// }
 
 			// Makes checkboxes
 			for (var i = 0; i < actions.length; i++) {
@@ -340,4 +344,8 @@ function xhr(rsrc, method, params, payload) {
 	req.open(method, rsrc + params, true);
 	req.send(payload);
 	return req;
+}
+
+function showForm(params) {
+
 }

@@ -6,14 +6,13 @@
 			["Alert", ["selection", "disabled"]]
 		],
 		[
-			["Name", ["sortingby"]],
-			["Radio ID"],
-			["Role", ["colorcolumn"]],
-			["Address", ["unsortable"]],
-			["Phone"],
-			["Email"]
-		],
-		["objid", "name", "radio id", "role", "address", "phone", "email"]
+			["Name", true, ["sortingby"]],
+			["Radio ID", true, []],
+			["Role", true, ["colorcolumn"]],
+			["Address", true, ["unsortable"]],
+			["Phone", true, []],
+			["Email", true, []]
+		]
 	],
 	"data": [
 		[
