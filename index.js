@@ -1,7 +1,8 @@
-var user = "";
-var password = "";
+var user = [
+	"",
+	""
+];
 var pages = [];
-
 var actionFuctions = {
 	"people": {
 		"Add Person": function() {
@@ -17,18 +18,28 @@ var actionFuctions = {
 
 		}
 	},
-	"inventory"
+	"inventory": {
+
+	}
 };
 
 window.onload = function() {
-	getPages();
 	setUpBefore();
-	loadPage(pages[0], true, true);
+	getPages();
 }
 
 function getPages() {
-	// Do XHR to get list of available pages
-	pages = ["people", "inventory", "equipment"];
+	var params = [
+		["user", user[0]],
+		["password", user[1]]
+	];
+	var req = xhr("api/getpages", "GET", params);
+	req.onreadystatechange = function() {
+		if (req.readyState == 4 && req.status == 200) {
+			pages = JSON.parse(req.responseText);
+			loadPage(pages[0], true);
+		}
+	}
 }
 
 function setUpBefore() {
@@ -103,16 +114,16 @@ function selectRow() {
 
 function loadPage(pageName, pageInfo, searchQuery, sortingBy, pageNumber, resultsPerPage) {
 	var overlay = showOverlay(content, false);
-	var params = generateQueryString([
-		["user", user],
-		["password", password],
+	var params = [
+		["user", user[0]],
+		["password", user[1]],
 		["page", pageName],
 		["pageinfo", pageInfo],
 		["search", searchQuery],
 		["sorting", sortingBy],
 		["pagenum", pageNumber],
 		["rpp", resultsPerPage]
-	]);
+	];
 	var req = xhr("api/getpage", "GET", params)
 	req.onreadystatechange = function() {
 		if (req.readyState == 4 && req.status == 200) {
@@ -190,6 +201,7 @@ function loadPage(pageName, pageInfo, searchQuery, sortingBy, pageNumber, result
 						button.disabled = true;
 						button.title = "This action is currently unavailable";
 					}
+					button.addEventListener('click', actionFuctions[pageName][name]);
 					actionButtons.appendChild(button);
 				}
 			}
@@ -200,7 +212,7 @@ function loadPage(pageName, pageInfo, searchQuery, sortingBy, pageNumber, result
 				for (var j = 0; j < properties.length; j++) {
 					if (properties[i][1]) {
 						var td = document.createElement('td');
-						td.innerHTML = items[i][j];
+						td.innerHTML = items[i][j + 1];
 						tr.appendChild(td);
 					}
 				}
@@ -340,6 +352,9 @@ function logOut() {
 }
 
 function xhr(rsrc, method, params, payload) {
+	if (Array.isArray(params)) {
+		params = generateQueryString(params);
+	}
 	var req = new XMLHttpRequest();
 	req.open(method, rsrc + params, true);
 	req.send(payload);
