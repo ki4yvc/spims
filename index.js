@@ -2,14 +2,20 @@ var user = [
 	"",
 	""
 ];
+var pageInfo = {};
 var pages = [];
 var actionFuctions = {
 	"people": {
 		"Add Person": function() {
-			var overlay = showOverlay(document.body, true);
-			var params = [
-
+			var fields = [];
+			var properties = pageInfo[1];
+			for (var i = 0; i < properties.length; i++) {
+				fields.push(properties[i][0]);
+			}
+			var buttons = [
+				"Add"
 			];
+			showForm("Add Person", fields, buttons);
 		},
 		"Edit": function() {
 
@@ -65,9 +71,6 @@ function setUpAfter() {
 	tableCheckboxes = Array.prototype.slice.call(tableCheckboxes);
 	tableCheckboxes.splice(1, 1);
 
-	for (var i = 0; i < actionButtons.children.length; i++) {
-		actionButtons.children[i].addEventListener('click', actionButtonPressed);
-	}
 	for (var i = 0; i < tableHeadData.length; i++) {
 		if (!existsAndHas(tableHeadData[i].className, "unsortable")) {
 			tableHeadData[i].addEventListener('click', sortTableBy);
@@ -79,10 +82,6 @@ function setUpAfter() {
 
 	window.onresize = resizeTable;
 	tableContainer.onscroll = scrollTableHead;
-}
-
-function actionButtonPressed() {
-	console.log(this);
 }
 
 function selectRow() {
@@ -112,13 +111,13 @@ function selectRow() {
 	}
 }
 
-function loadPage(pageName, pageInfo, searchQuery, sortingBy, pageNumber, resultsPerPage) {
+function loadPage(pageName, getPageInfo, searchQuery, sortingBy, pageNumber, resultsPerPage) {
 	var overlay = showOverlay(content, false);
 	var params = [
 		["user", user[0]],
 		["password", user[1]],
 		["page", pageName],
-		["pageinfo", pageInfo],
+		["info", getPageInfo],
 		["search", searchQuery],
 		["sorting", sortingBy],
 		["pagenum", pageNumber],
@@ -129,18 +128,19 @@ function loadPage(pageName, pageInfo, searchQuery, sortingBy, pageNumber, result
 		if (req.readyState == 4 && req.status == 200) {
 			var pageJSON = JSON.parse(req.responseText);
 			content.className = pageName;
-			if (pageInfo) {
-				info = pageJSON.info;
-				actions = info[0];
-				properties = info[1];
+			if (getPageInfo) {
+				pageInfo = pageJSON.info;
 			}
-			data = pageJSON.data;
+			var info = pageInfo;
+			var actions = info[0];
+			var properties = info[1];
+			var data = pageJSON.data;
 			var items = data[0];
 			var itemsInDB = data[1];
 
 			table = document.createElement('table');
 
-			if (pageInfo) {
+			if (getPageInfo) {
 				// Makes table head
 				var sorting = [];
 				tableHeader = document.createElement('div');
@@ -236,7 +236,7 @@ function loadPage(pageName, pageInfo, searchQuery, sortingBy, pageNumber, result
 						}
 						trows[j].insertBefore(clone, trows[j].firstChild);
 					}
-					if (pageInfo) {
+					if (getPageInfo) {
 						var div = document.createElement('div');
 						toggleClass(div, "checkcol", true);
 						div.appendChild(checkbox.cloneNode());
@@ -292,16 +292,6 @@ function sortTableBy() {
 		toggleClass(this, "sorting-by", true);
 		// If short, do local sorting, else loadPage()
 	}
-}
-
-function showOverlay(parent, dark) {
-	var overlay = document.createElement('div');
-	toggleClass(overlay, "overlay", true);
-	if (dark) {
-		toggleClass(overlay, "dark", true);
-	}
-	parent.appendChild(overlay);
-	return overlay;
 }
 
 function hideOverlay(overlay) {
@@ -361,6 +351,44 @@ function xhr(rsrc, method, params, payload) {
 	return req;
 }
 
-function showForm(params) {
+function showOverlay(parent, dark) {
+	var overlay = document.createElement('div');
+	toggleClass(overlay, "overlay", true);
+	if (dark) {
+		toggleClass(overlay, "dark", true);
+	}
+	parent.appendChild(overlay);
+	return overlay;
+}
 
+function showForm(title, fields, buttons) {
+	var overlay = showOverlay(document.body, true);
+	var formTemplate = document.getElementById('form-template');
+	var form = document.importNode(formTemplate.content, true);
+	var formTitle = form.querySelector('.form-title');
+	formTitle.innerHTML = title;
+	var formFields = form.querySelector('.form-fields');
+	for (var i = 0; i < fields.length; i++) {
+		var tr = document.createElement('tr');
+		var fieldNameTD = document.createElement('td');
+		var fieldTD = document.createElement('td');
+		var fieldLabel = document.createElement('label');
+		var field = document.createElement('input');
+		var id = "formfield-" + fields[i].toLowerCase();
+		fieldLabel.setAttribute('for', id);
+		fieldLabel.innerHTML = fields[i];
+		field.id = id;
+		fieldNameTD.appendChild(fieldLabel);
+		fieldTD.appendChild(field);
+		tr.appendChild(fieldNameTD);
+		tr.appendChild(fieldTD);
+		formFields.appendChild(tr);
+	}
+	var formButtons = form.querySelector('.form-buttons');
+	for (var i = 0; i < buttons.length; i++) {
+		var button = document.createElement('button');
+		button.innerHTML = buttons[i];
+		formButtons.appendChild(button);
+	}
+	overlay.appendChild(form);
 }

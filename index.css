@@ -279,15 +279,6 @@ body {
 		line-height: 18px;
 	}
 
-	/*#content table td span.colordata {
-		padding: 2px 12px;
-		display: inline-block;
-		color: white;
-		background-color: #5e5e5e;
-		border-radius: 4px;
-		text-align: center;
-	}*/
-
 	.overlay {
 		position: absolute;
 		z-index: 1;
@@ -302,18 +293,13 @@ body {
 		background-color: rgba(0, 0, 0, 0.8);
 	}
 
-	.overlay div {
-		margin: 200px auto 0px;
+	.overlay form {
+		position: fixed;
+		top: 20vh;
+		left: 50vw;
+		transform: translate(-50%);
+		background-color: white;
 	}
-
-	/* People */
-		/*#content.people table td span.colordata.role.admin {
-			background-color: #00bda7;
-		}
-
-		#content.people table td span.colordata.role.captain {
-			background-color: #00bda7;
-		}*/
 
 /* Help button */
 	#help-button {
