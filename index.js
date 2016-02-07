@@ -2,23 +2,38 @@ var user = [
 	"",
 	""
 ];
-var pageInfo = {};
+var page = {};
 var pages = [];
 var actionFuctions = {
 	"people": {
 		"Add Person": function() {
 			var fields = [];
-			var properties = pageInfo[1];
+			var properties = page.properties;
 			for (var i = 0; i < properties.length; i++) {
-				fields.push(properties[i][0]);
+				fields.push([properties[i][0]]);
 			}
 			var buttons = [
 				"Add"
 			];
-			showForm("Add Person", fields, buttons);
+			showForm("Add Person", "", fields, buttons);
 		},
 		"Edit": function() {
-
+			var fields = [];
+			var properties = page.properties;
+			for (var i = 0; i < properties.length; i++) {
+				fields.push([properties[i][0], "", "Mixed"]);
+			}
+			var numItems = page.selectedItems.length;
+			if (numItems == 1) {
+				numItems += " person";
+			} else {
+				numItems += " people";
+			}
+			var buttons = [
+				"Update",
+				"Remove"
+			];
+			showForm("Edit", "Editing " + numItems, fields, buttons);
 		},
 		"Alert": function() {
 
@@ -53,6 +68,7 @@ function setUpBefore() {
 	accountMenu = document.getElementById('account-menu');
 	currentUser = document.getElementById('current-user');
 	logOutButton = document.getElementById('log-out-button');
+	searchForm = document.getElementById('toolbar-search-form');
 	actionButtons = document.getElementById('action-buttons');
 	content = document.getElementById('content');
 
@@ -63,10 +79,11 @@ function setUpBefore() {
 		toggleClass(accountMenu, 'selected');
 	});
 	logOutButton.addEventListener('click', logOut);
+
+	searchForm.onsubmit = search;
 }
 
 function setUpAfter() {
-	tableHeadData = tableHeader.getElementsByTagName('div');
 	tableCheckboxes = content.querySelectorAll('input[type="checkbox"]');
 	tableCheckboxes = Array.prototype.slice.call(tableCheckboxes);
 	tableCheckboxes.splice(1, 1);
@@ -95,8 +112,14 @@ function selectRow() {
 			tableCheckboxes[0].checked = false;
 		}
 	}
+	page.selectedItems = [];
 	for (var i = 1; i < tableCheckboxes.length; i++) {
 		checked[i - 1] = tableCheckboxes[i].checked ? true : false;
+		if (tableCheckboxes[i].checked) {
+			var tr = tableCheckboxes[i].parentNode.parentNode;
+			var index = tr.getAttribute('data-initial-index');
+			page.selectedItems.push(index);
+		}
 	}
 	tableCheckboxes[0].checked = checked.indexOf(false) == -1;
 	var selections = actionButtons.querySelectorAll('.selection:not(.disabled)');
@@ -129,14 +152,16 @@ function loadPage(pageName, getPageInfo, searchQuery, sortingBy, pageNumber, res
 			var pageJSON = JSON.parse(req.responseText);
 			content.className = pageName;
 			if (getPageInfo) {
-				pageInfo = pageJSON.info;
+				page.actions = pageJSON.info[0];
+				page.properties = pageJSON.info[1];
 			}
-			var info = pageInfo;
+			var info = pageJSON.info;
 			var actions = info[0];
 			var properties = info[1];
 			var data = pageJSON.data;
 			var items = data[0];
-			var itemsInDB = data[1];
+			var itemsInDB = page.itemsinDB = data[1];
+			page.selectedItems = [];
 
 			table = document.createElement('table');
 
@@ -169,10 +194,11 @@ function loadPage(pageName, getPageInfo, searchQuery, sortingBy, pageNumber, res
 						dummyTableHeader.appendChild(td);
 					}
 				}
+				tableHeadData = tableHeader.getElementsByTagName('div');
 				if (sorting.indexOf(1) != -1) {
-					toggleClass(tableHeader.children[sorting.indexOf(1)], "sorting-by", true);
+					toggleClass(tableHeadData[sorting.indexOf(1)], "sorting-by", true);
 				} else if (sorting.indexOf(0) != -1){
-					toggleClass(tableHeader.children[sorting.indexOf(0)], "sorting-by", true);
+					toggleClass(tableHeadData[sorting.indexOf(0)], "sorting-by", true);
 				}
 				content.appendChild(tableHeader);
 				table.appendChild(dummyTableHeader);
@@ -216,6 +242,7 @@ function loadPage(pageName, getPageInfo, searchQuery, sortingBy, pageNumber, res
 						tr.appendChild(td);
 					}
 				}
+				tr.setAttribute('data-initial-index', i);
 				table.appendChild(tr);
 			}
 
@@ -294,10 +321,6 @@ function sortTableBy() {
 	}
 }
 
-function hideOverlay(overlay) {
-	overlay.parentNode.removeChild(overlay);
-}
-
 function toggleClass(element, className, assert) {
 	var index = element.className.indexOf(className);
 	if (element.className == "" && assert != false) {
@@ -361,12 +384,18 @@ function showOverlay(parent, dark) {
 	return overlay;
 }
 
-function showForm(title, fields, buttons) {
+function hideOverlay(overlay) {
+	overlay.parentNode.removeChild(overlay);
+}
+
+function showForm(title, desc, fields, buttons) {
 	var overlay = showOverlay(document.body, true);
 	var formTemplate = document.getElementById('form-template');
-	var form = document.importNode(formTemplate.content, true);
+	var form = document.importNode(formTemplate.content, true).children[0];
 	var formTitle = form.querySelector('.form-title');
 	formTitle.innerHTML = title;
+	var formDesc = form.querySelector('.form-desc');
+	formDesc.innerHTML = desc;
 	var formFields = form.querySelector('.form-fields');
 	for (var i = 0; i < fields.length; i++) {
 		var tr = document.createElement('tr');
@@ -374,10 +403,16 @@ function showForm(title, fields, buttons) {
 		var fieldTD = document.createElement('td');
 		var fieldLabel = document.createElement('label');
 		var field = document.createElement('input');
-		var id = "formfield-" + fields[i].toLowerCase();
+		var id = "formfield-" + fields[i][0].toLowerCase();
 		fieldLabel.setAttribute('for', id);
-		fieldLabel.innerHTML = fields[i];
+		fieldLabel.innerHTML = fields[i][0];
 		field.id = id;
+		if (fields[i][1] != undefined) {
+			field.value = fields[i][1];
+		}
+		if (fields[i][2] != undefined) {
+			field.setAttribute('placeholder', fields[i][2]);
+		}
 		fieldNameTD.appendChild(fieldLabel);
 		fieldTD.appendChild(field);
 		tr.appendChild(fieldNameTD);
@@ -390,5 +425,16 @@ function showForm(title, fields, buttons) {
 		button.innerHTML = buttons[i];
 		formButtons.appendChild(button);
 	}
+	form.onsubmit = function() {
+		return false;
+	}
+	var formCloseButton = form.querySelector(".form-close-button");
+	formCloseButton.addEventListener('click', function() {
+		hideOverlay(overlay);
+	});
 	overlay.appendChild(form);
+	var top = (window.innerHeight * 0.2) | 0;
+	var left = (window.innerWidth * 0.5 - form.clientWidth * 0.5) | 0;
+	form.style.top = top + "px";
+	form.style.left = left + "px";
 }

@@ -104,11 +104,6 @@ body {
 					background-color: \(themecolor:-0.6);
 				}
 
-				/*#current-user.admin:hover {
-					background-color: #00bda7;
-					transition: 0.25s;
-				}*/
-
 				#log-out-button:hover {
 					background-color: #bf0000;
 					transition: 0.25s;
@@ -279,27 +274,87 @@ body {
 		line-height: 18px;
 	}
 
-	.overlay {
-		position: absolute;
-		z-index: 1;
-		top: 0px;
-		right: 0px;
-		bottom: 0px;
-		left: 0px;
-		background-color: rgba(255, 255, 255, 0.8);
-	}
+	/* Overlay */
+		.overlay {
+			position: absolute;
+			z-index: 1;
+			top: 0px;
+			right: 0px;
+			bottom: 0px;
+			left: 0px;
+			background-color: rgba(255, 255, 255, 0.8);
+		}
 
-	.overlay.dark {
-		background-color: rgba(0, 0, 0, 0.8);
-	}
+		.overlay.dark {
+			background-color: rgba(0, 0, 0, 0.8);
+		}
 
-	.overlay form {
-		position: fixed;
-		top: 20vh;
-		left: 50vw;
-		transform: translate(-50%);
-		background-color: white;
-	}
+		/* Form */
+			.overlay form {
+				position: fixed;
+				padding: 8px;
+				background-color: white;
+				border-radius: 4px;
+			}
+
+			.overlay form .form-header {
+				padding: 0px 0px 4px 6px;
+				border-bottom: 1px solid #404040;
+			}
+
+			.overlay form .form-close-button {
+				margin-left: 12px;
+				float: right;
+				cursor: pointer;
+				font-size: 12px;
+			}
+
+			.overlay form .form-title {
+				display: block;
+				font-size: 16px;
+			}
+
+			.overlay form .form-desc {
+				display: block;
+				color: #c0c0c0;
+				font-size: 12px;
+				font-style: italic;
+			}
+
+			.overlay form .form-fields {
+				margin: 8px 0px;
+				padding: 0px 16px;
+				width: 100%;
+			}
+
+			.overlay form .form-fields td:nth-child(1) {
+				padding: 0px 4px 0px 0px;
+				color: #404040;
+				font-size: 14px;
+				text-align: right;
+			}
+
+			.overlay form .form-fields td:nth-child(2) input {
+				padding: 2px 4px;
+				width: 100%;
+				font-family: inherit;
+				font-size: 14px;
+				border: 1px solid #808080;
+				box-sizing: border-box;
+			}
+
+			.overlay form .form-buttons button {
+				margin: 4px 0px 0px;
+				padding: 4px 8px;
+				width: 100%;
+				color: #404040;
+				font-family: inherit;
+				font-size: 14px;
+				cursor: pointer;
+				border: 1px solid #606060;
+				background-color: #e0e0e0;
+				border-radius: 3px;
+			}
 
 /* Help button */
 	#help-button {

@@ -21,7 +21,7 @@
 			</div>
 		</div>
 		<div id="toolbar">
-			<form id="toolbar-search-form" onsubmit="return search()">
+			<form id="toolbar-search-form">
 				<input type="text" placeholder="Enter search query"><button type="submit" class="fa fa-search"></button>
 			</form>
 			<div id="action-buttons"></div>
@@ -30,10 +30,11 @@
     </div>
 	<div id="content"></div>
 	<template id="form-template">
-		<form onsubmit="return false">
+		<form>
 			<div class="form-header">
+				<span class="form-close-button fa fa-close" title="Close"></span>
 				<span class="form-title"></span>
-				<span class="form-close-button fa fa-close"></span>
+				<span class="form-desc"></span>
 			</div>
 			<table class="form-fields"></table>
 			<div class="form-buttons"></div>

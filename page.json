@@ -8,7 +8,7 @@
 		[
 			["Name", true, ["sortingby"]],
 			["Radio ID", true, []],
-			["Role", true, ["colorcolumn"]],
+			["Role", true, []],
 			["Address", true, ["unsortable"]],
 			["Phone", true, []],
 			["Email", true, []]
