@@ -1,1 +1,5 @@
-["people", "inventory", "equipment"]
+[
+	["people", "person", "people"],
+	["inventory", "item", "items"],
+	["equipment", "item", "items"]
+]

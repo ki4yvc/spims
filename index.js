@@ -5,8 +5,8 @@ var user = [
 var page = {};
 var pages = [];
 var actionFuctions = {
-	"people": {
-		"Add Person": function() {
+	"universal": {
+		"add": function(pageName) {
 			var fields = [];
 			var properties = page.properties;
 			for (var i = 0; i < properties.length; i++) {
@@ -15,32 +15,72 @@ var actionFuctions = {
 			var buttons = [
 				"Add"
 			];
-			showForm("Add Person", "", fields, buttons);
+			var title = "Add " + actionFuctions.universal.pluralize(1, pageName);
+			showForm(title, "", fields, buttons);
 		},
-		"Edit": function() {
+		"edit": function(pageName) {
 			var fields = [];
 			var properties = page.properties;
+			var selectedItems = [];
+			for (var i = 0; i < page.selectedItems.length; i++) {
+				var index = page.selectedItems[i];
+				selectedItems.push(page.items[index]);
+			}
 			for (var i = 0; i < properties.length; i++) {
-				fields.push([properties[i][0], "", "Mixed"]);
+				var name = properties[i][0];
+				var value = selectedItems[0][i + 1];
+				var placeholder;
+				for (var j = 1; j < selectedItems.length; j++) {
+					if (selectedItems[j][i + 1] != value) {
+						value = undefined;
+						placeholder = "Mixed";
+						break;
+					}
+				}
+				fields.push([name, value, placeholder]);
 			}
 			var numItems = page.selectedItems.length;
-			if (numItems == 1) {
-				numItems += " person";
-			} else {
-				numItems += " people";
-			}
+			numItems += " " + actionFuctions.universal.pluralize(numItems, pageName);
+			var desc = "Editing " + numItems;
 			var buttons = [
 				"Update",
 				"Remove"
 			];
-			showForm("Edit", "Editing " + numItems, fields, buttons);
+			showForm("Edit", desc, fields, buttons);
+		},
+		"pluralize": function(num, page) {
+			var index = -1;
+			for (var i = 0; i < pages.length; i++) {
+				if (pages[i][0] == page) {
+					index = i;
+					break;
+				}
+			}
+			if (num == 1) {
+				return pages[index][1];
+			} else {
+				return pages[index][2];
+			}
+		}
+	},
+	"people": {
+		"Add Person": function() {
+			actionFuctions.universal.add("people");
+		},
+		"Edit": function() {
+			actionFuctions.universal.edit("people");
 		},
 		"Alert": function() {
 
 		}
 	},
 	"inventory": {
-
+		"Add Item": function() {
+			actionFuctions.universal.add("inventory");
+		},
+		"Edit": function() {
+			actionFuctions.universal.edit("inventory");
+		}
 	}
 };
 
@@ -58,7 +98,7 @@ function getPages() {
 	req.onreadystatechange = function() {
 		if (req.readyState == 4 && req.status == 200) {
 			pages = JSON.parse(req.responseText);
-			loadPage(pages[0], true);
+			loadPage(pages[0][0], true);
 		}
 	}
 }
@@ -152,14 +192,14 @@ function loadPage(pageName, getPageInfo, searchQuery, sortingBy, pageNumber, res
 			var pageJSON = JSON.parse(req.responseText);
 			content.className = pageName;
 			if (getPageInfo) {
-				page.actions = pageJSON.info[0];
-				page.properties = pageJSON.info[1];
+				var info = pageJSON.info;
+				page.actions = info[0];
+				page.properties = info[1];
 			}
-			var info = pageJSON.info;
-			var actions = info[0];
-			var properties = info[1];
+			var actions = page.actions;
+			var properties = page.properties;
 			var data = pageJSON.data;
-			var items = data[0];
+			var items = page.items = data[0];
 			var itemsInDB = page.itemsinDB = data[1];
 			page.selectedItems = [];
 
@@ -407,6 +447,7 @@ function showForm(title, desc, fields, buttons) {
 		fieldLabel.setAttribute('for', id);
 		fieldLabel.innerHTML = fields[i][0];
 		field.id = id;
+		field.name = fields[i][0].toLowerCase();
 		if (fields[i][1] != undefined) {
 			field.value = fields[i][1];
 		}
