@@ -195,6 +195,7 @@ function loadPage(pageName, getPageInfo, searchQuery, sortingBy, pageNumber, res
 				var info = pageJSON.info;
 				page.actions = info[0];
 				page.properties = info[1];
+				page.name = pageName;
 			}
 			var actions = page.actions;
 			var properties = page.properties;
@@ -404,13 +405,13 @@ function logOut() {
 	// Log out
 }
 
-function xhr(rsrc, method, params, payload) {
+function xhr(rsrc, method, params, body) {
 	if (Array.isArray(params)) {
 		params = generateQueryString(params);
 	}
 	var req = new XMLHttpRequest();
 	req.open(method, rsrc + params, true);
-	req.send(payload);
+	req.send(body);
 	return req;
 }
 
@@ -464,6 +465,17 @@ function showForm(title, desc, fields, buttons) {
 	for (var i = 0; i < buttons.length; i++) {
 		var button = document.createElement('button');
 		button.innerHTML = buttons[i];
+		button.addEventListener('click', function() {
+			var body = {};
+			body.page = page.name;
+			body.action = button.innerHTML;
+			body.form = {};
+			var inputs = form.getElementsByTagName('input');
+			for (var i = 0; i < inputs.length; i++) {
+				body.form[inputs[i].name] = inputs[i].value;
+			}
+			var req = xhr("/api/submitform", "POST", "", JSON.stringify(body));
+		});
 		formButtons.appendChild(button);
 	}
 	form.onsubmit = function() {
