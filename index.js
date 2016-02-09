@@ -16,7 +16,7 @@ var actionFuctions = {
 				"Add"
 			];
 			var title = "Add " + actionFuctions.universal.pluralize(1, pageName);
-			showForm(title, "", fields, buttons);
+			makeForm(title, "", fields, buttons);
 		},
 		"edit": function(pageName) {
 			var fields = [];
@@ -46,7 +46,8 @@ var actionFuctions = {
 				"Update",
 				"Remove"
 			];
-			showForm("Edit", desc, fields, buttons);
+			console.log(fields);
+			makeForm("Edit", desc, fields, buttons);
 		},
 		"pluralize": function(num, page) {
 			var index = -1;
@@ -90,11 +91,7 @@ window.onload = function() {
 }
 
 function getPages() {
-	var params = [
-		["user", user[0]],
-		["password", user[1]]
-	];
-	var req = xhr("api/getpages", "GET", params);
+	var req = xhr("/api/getpages", "GET", true);
 	req.onreadystatechange = function() {
 		if (req.readyState == 4 && req.status == 200) {
 			pages = JSON.parse(req.responseText);
@@ -128,11 +125,6 @@ function setUpAfter() {
 	tableCheckboxes = Array.prototype.slice.call(tableCheckboxes);
 	tableCheckboxes.splice(1, 1);
 
-	for (var i = 0; i < tableHeadData.length; i++) {
-		if (!existsAndHas(tableHeadData[i].className, "unsortable")) {
-			tableHeadData[i].addEventListener('click', sortTableBy);
-		}
-	}
 	for (var i = 0; i < tableCheckboxes.length; i++) {
 		tableCheckboxes[i].addEventListener('change', selectRow);
 	}
@@ -177,8 +169,6 @@ function selectRow() {
 function loadPage(pageName, getPageInfo, searchQuery, sortingBy, pageNumber, resultsPerPage) {
 	var overlay = showOverlay(content, false);
 	var params = [
-		["user", user[0]],
-		["password", user[1]],
 		["page", pageName],
 		["info", getPageInfo],
 		["search", searchQuery],
@@ -186,7 +176,7 @@ function loadPage(pageName, getPageInfo, searchQuery, sortingBy, pageNumber, res
 		["pagenum", pageNumber],
 		["rpp", resultsPerPage]
 	];
-	var req = xhr("api/getpage", "GET", params)
+	var req = xhr("/api/getpage", "GET", true, params)
 	req.onreadystatechange = function() {
 		if (req.readyState == 4 && req.status == 200) {
 			var pageJSON = JSON.parse(req.responseText);
@@ -224,10 +214,13 @@ function loadPage(pageName, getPageInfo, searchQuery, sortingBy, pageNumber, res
 							sorting[i] = -1;
 							toggleClass(div, "unsortable", true);
 							toggleClass(td, "unsortable", true);
-						} else if (existsAndHas(attributes, "sortingby")){
-							sorting[i] = 1;
 						} else {
-							sorting[i] = 0;
+							div.addEventListener('click', sortTableBy);
+							if (existsAndHas(attributes, "sortingby")){
+								sorting[i] = 1;
+							} else {
+								sorting[i] = 0;
+							}
 						}
 						div.innerHTML = name;
 						td.innerHTML = name;
@@ -272,7 +265,6 @@ function loadPage(pageName, getPageInfo, searchQuery, sortingBy, pageNumber, res
 					actionButtons.appendChild(button);
 				}
 			}
-
 			// Makes table body
 			for (var i = 0; i < items.length; i++) {
 				var tr = document.createElement('tr');
@@ -405,9 +397,26 @@ function logOut() {
 	// Log out
 }
 
-function xhr(rsrc, method, params, body) {
+function xhr(rsrc, method, loginPrefix, params, body) {
+	if (loginPrefix == undefined) {
+		loginPrefix = true;
+	}
+	if (params == undefined) {
+		params = "";
+	}
 	if (Array.isArray(params)) {
+		params.splice(0, 0, ["user", user[0]]);
+		params.splice(1, 0, ["password", user[1]]);
 		params = generateQueryString(params);
+	} else {
+		if (loginPrefix) {
+			var loginString = "?user=" + user[0] + "&password=" + user[1];
+			if (params == "") {
+				params = loginString;
+			} else {
+				params = loginString + params.slice(1);
+			}
+		}
 	}
 	var req = new XMLHttpRequest();
 	req.open(method, rsrc + params, true);
@@ -429,7 +438,7 @@ function hideOverlay(overlay) {
 	overlay.parentNode.removeChild(overlay);
 }
 
-function showForm(title, desc, fields, buttons) {
+function makeForm(title, desc, fields, buttons) {
 	var overlay = showOverlay(document.body, true);
 	var formTemplate = document.getElementById('form-template');
 	var form = document.importNode(formTemplate.content, true).children[0];
@@ -468,13 +477,13 @@ function showForm(title, desc, fields, buttons) {
 		button.addEventListener('click', function() {
 			var body = {};
 			body.page = page.name;
-			body.action = button.innerHTML;
+			body.action = this.innerHTML;
 			body.form = {};
 			var inputs = form.getElementsByTagName('input');
 			for (var i = 0; i < inputs.length; i++) {
 				body.form[inputs[i].name] = inputs[i].value;
 			}
-			var req = xhr("/api/submitform", "POST", "", JSON.stringify(body));
+			var req = xhr("/api/submitform", "POST", true, "", JSON.stringify(body));
 		});
 		formButtons.appendChild(button);
 	}

@@ -3,7 +3,7 @@ import api
 
 reqData = api.getRequestData()
 qstr = reqData["qstr"]
-api.printHeaders("", "application/json", True)
+api.printHeaders("", "json", True)
 
 # This would be done dynamically using the qstr and SQL database
 with open("../pages.json") as rsrc:

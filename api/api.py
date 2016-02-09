@@ -17,6 +17,12 @@ def printHeaders(path = "", mime = None, nocache = False):
 		mime = mimetypes.guess_type(path[1:])[0]
 		if mime == None:
 			mime = "text/plain"
+	elif "/" not in mime:
+		mimes = {"text": "text/plain", "html": "text/html", "css": "text/css", "js": "application/javascript", "json": "application/json"}
+		if mime in mimes:
+			mime = mimes[mime]
+		else:
+			mime = mimes["text"]
 	print("Content-Type: ", mime, "; charset=utf-8", sep="")
 	if nocache:
 		print("Cache-Control: no-store")
