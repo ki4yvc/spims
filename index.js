@@ -95,7 +95,7 @@ function getPages() {
 	req.onreadystatechange = function() {
 		if (req.readyState == 4 && req.status == 200) {
 			pages = JSON.parse(req.responseText);
-			loadPage(pages[0][0], true);
+			loadPage(pages[0][0], true, "", undefined, 1, 40);
 		}
 	}
 }
@@ -308,19 +308,21 @@ function loadPage(pageName, getPageInfo, searchQuery, sortingBy, pageNumber, res
 			}
 
 			// Makes page number selector
-			// var totalItems = pageJSON.data.totalitems;
-			// var pageNumberContainer = document.createElement('div');
-			// pageNumberContainer.id = "page-number-container"
-			// var currentPageNumber = document.createElement('input');
-			// currentPageNumber.value = pageNumber;
-			// var previousButton = document.createElement('span');
-			// var nextButton = document.createElement('span');
-			// pageNumberContainer.appendChild(previousButton);
-			// pageNumberContainer.appendChild(currentPageNumber);
-			// var numPages = Math.ceil(totalItems / resultsPerPage);
-			// pageNumberContainer.appendChild(document.createTextNode("/ " + numPages));
-			// pageNumberContainer.appendChild(nextButton);
-			// content.appendChild(pageNumberContainer);
+			var pageNumberContainer = document.createElement('div');
+			pageNumberContainer.id = "page-number-container"
+			var currentPageNumber = document.createElement('input');
+			currentPageNumber.className = "current-page-num";
+			currentPageNumber.value = pageNumber;
+			var previousButton = document.createElement('button');
+			previousButton.className = "page-num-nav-button fa fa-chevron-left";
+			var nextButton = document.createElement('button');
+			nextButton.className = "page-num-nav-button fa fa-chevron-right";
+			pageNumberContainer.appendChild(previousButton);
+			pageNumberContainer.appendChild(currentPageNumber);
+			var numPages = Math.ceil(itemsInDB / resultsPerPage);
+			pageNumberContainer.appendChild(document.createTextNode(" / " + numPages));
+			pageNumberContainer.appendChild(nextButton);
+			content.appendChild(pageNumberContainer);
 
 			hideOverlay(overlay);
 			setUpAfter();
