@@ -26,8 +26,6 @@ button::-moz-focus-inner {
 
 	/* Top bar */
 		#top-bar {
-			position: absolute;
-			z-index: 2;
 			padding: 6px 48px;
 			width: 100vw;
 			height: 44px;
@@ -116,7 +114,6 @@ button::-moz-focus-inner {
 
 		/* Toolbar */
 			#toolbar {
-				position: absolute;
 				top: 44px;
 				left: 0px;
 				padding: 4px 48px;
@@ -376,13 +373,12 @@ button::-moz-focus-inner {
 			}
 
 			.overlay form .form-fields td:nth-child(1) {
-				padding: 0px 4px 0px 0px;
 				color: #404040;
 				font-size: 14px;
 				text-align: right;
 			}
 
-			.overlay form .form-fields td:nth-child(2) input {
+			.overlay form .form-fields td input, .overlay form .form-fields td textarea {
 				padding: 2px 4px;
 				width: 100%;
 				font-family: inherit;

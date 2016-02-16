@@ -4,7 +4,7 @@ var user = [
 ];
 var page = {};
 var pages = [];
-var actionFuctions = {
+var actionFunctions = {
 	"universal": {
 		"add": function(pageName) {
 			var fields = [];
@@ -15,17 +15,13 @@ var actionFuctions = {
 			var buttons = [
 				"Add"
 			];
-			var title = "Add " + actionFuctions.universal.pluralize(1, pageName);
+			var title = "Add " + actionFunctions.universal.pluralize(1, pageName, false);
 			makeForm(title, "", fields, buttons);
 		},
 		"edit": function(pageName) {
 			var fields = [];
 			var properties = page.properties;
-			var selectedItems = [];
-			for (var i = 0; i < page.selectedItems.length; i++) {
-				var index = page.selectedItems[i];
-				selectedItems.push(page.items[index]);
-			}
+			var selectedItems = actionFunctions.universal.getSelected();
 			for (var i = 0; i < properties.length; i++) {
 				var name = properties[i][0];
 				var value = selectedItems[0][i + 1];
@@ -39,48 +35,60 @@ var actionFuctions = {
 				}
 				fields.push([name, value, placeholder]);
 			}
-			var numItems = page.selectedItems.length;
-			numItems += " " + actionFuctions.universal.pluralize(numItems, pageName);
+			var numItems = actionFunctions.universal.pluralize(page.selectedItems.length, pageName, true);
 			var desc = "Editing " + numItems;
 			var buttons = [
 				"Update",
 				"Remove"
 			];
-			console.log(fields);
 			makeForm("Edit", desc, fields, buttons);
 		},
-		"pluralize": function(num, page) {
+		"pluralize": function(num, page, includeNum) {
 			var index = -1;
+			var unit;
 			for (var i = 0; i < pages.length; i++) {
 				if (pages[i][0] == page) {
 					index = i;
 					break;
 				}
 			}
-			if (num == 1) {
-				return pages[index][1];
-			} else {
-				return pages[index][2];
+			unit = num == 1 ? pages[index][1] : pages[index][2];
+			return includeNum ? num + " " + unit : unit;
+		},
+		"getSelected": function() {
+			var selectedItems = [];
+			for (var i = 0; i < page.selectedItems.length; i++) {
+				var index = page.selectedItems[i];
+				selectedItems.push(page.items[index]);
 			}
+			return selectedItems;
 		}
 	},
 	"people": {
 		"Add Person": function() {
-			actionFuctions.universal.add("people");
+			actionFunctions.universal.add("people");
 		},
 		"Edit": function() {
-			actionFuctions.universal.edit("people");
+			actionFunctions.universal.edit("people");
 		},
 		"Alert": function() {
-
+			var numItems = actionFunctions.universal.pluralize(page.selectedItems.length, "people", true);
+			var desc = "Notifying " + numItems;
+			var fields = [
+				[undefined, undefined, "Message", true]
+			];
+			var buttons = [
+				"Alert"
+			];
+			makeForm("Alert", desc, fields, buttons);
 		}
 	},
 	"inventory": {
 		"Add Item": function() {
-			actionFuctions.universal.add("inventory");
+			actionFunctions.universal.add("inventory");
 		},
 		"Edit": function() {
-			actionFuctions.universal.edit("inventory");
+			actionFunctions.universal.edit("inventory");
 		}
 	}
 };
@@ -95,7 +103,7 @@ function getPages() {
 	req.onreadystatechange = function() {
 		if (req.readyState == 4 && req.status == 200) {
 			pages = JSON.parse(req.responseText);
-			loadPage(pages[0][0], true, "", undefined, 1, 40);
+			loadPage(pages[0][0], "", undefined, 1, 40);
 		}
 	}
 }
@@ -166,11 +174,10 @@ function selectRow() {
 	}
 }
 
-function loadPage(pageName, getPageInfo, searchQuery, sortingBy, pageNumber, resultsPerPage) {
+function loadPage(pageName, searchQuery, sortingBy, pageNumber, resultsPerPage) {
 	var overlay = showOverlay(content, false);
 	var params = [
 		["page", pageName],
-		["info", getPageInfo],
 		["search", searchQuery],
 		["sorting", sortingBy],
 		["pagenum", pageNumber],
@@ -181,90 +188,91 @@ function loadPage(pageName, getPageInfo, searchQuery, sortingBy, pageNumber, res
 		if (req.readyState == 4 && req.status == 200) {
 			var pageJSON = JSON.parse(req.responseText);
 			content.className = pageName;
-			if (getPageInfo) {
-				var info = pageJSON.info;
-				page.actions = info[0];
-				page.properties = info[1];
-				page.name = pageName;
-			}
+			var info = pageJSON.info;
+			page.actions = info[0];
+			page.properties = info[1];
+			page.name = pageName;
 			var actions = page.actions;
 			var properties = page.properties;
 			var data = pageJSON.data;
 			var items = page.items = data[0];
 			var itemsInDB = page.itemsinDB = data[1];
 			page.selectedItems = [];
+			page.searchQuery = searchQuery;
+			page.sortingBy = sortingBy;
+			page.pageNumber = pageNumber;
+			page.resultsPerPage = resultsPerPage;
 
 			table = document.createElement('table');
 
-			if (getPageInfo) {
-				// Makes table head
-				var sorting = [];
-				tableHeader = document.createElement('div');
-				toggleClass(tableHeader, "table-header", true);
-				var dummyTableHeader = document.createElement('tr');
-				toggleClass(dummyTableHeader, "dummy-table-header", true);
-				for (var i = 0; i < properties.length; i++) {
-					var property = properties[i];
-					if (property[1]) {
-						var div = document.createElement('div');
-						var td = document.createElement('td');
-						var name = property[0];
-						var attributes = property[2];
-						if (existsAndHas(attributes, "unsortable")) {
-							sorting[i] = -1;
-							toggleClass(div, "unsortable", true);
-							toggleClass(td, "unsortable", true);
+			// Makes table head
+			var sorting = [];
+			tableHeader = document.createElement('div');
+			toggleClass(tableHeader, "table-header", true);
+			var dummyTableHeader = document.createElement('tr');
+			toggleClass(dummyTableHeader, "dummy-table-header", true);
+			for (var i = 0; i < properties.length; i++) {
+				var property = properties[i];
+				if (property[1]) {
+					var div = document.createElement('div');
+					var td = document.createElement('td');
+					var name = property[0];
+					var attributes = property[2];
+					if (existsAndHas(attributes, "unsortable")) {
+						sorting[i] = -1;
+						toggleClass(div, "unsortable", true);
+						toggleClass(td, "unsortable", true);
+					} else {
+						div.addEventListener('click', sortTableBy);
+						if (existsAndHas(attributes, "sortingby")){
+							sorting[i] = 1;
 						} else {
-							div.addEventListener('click', sortTableBy);
-							if (existsAndHas(attributes, "sortingby")){
-								sorting[i] = 1;
-							} else {
-								sorting[i] = 0;
-							}
+							sorting[i] = 0;
 						}
-						div.innerHTML = name;
-						td.innerHTML = name;
-						tableHeader.appendChild(div);
-						dummyTableHeader.appendChild(td);
 					}
-				}
-				tableHeadData = tableHeader.getElementsByTagName('div');
-				if (sorting.indexOf(1) != -1) {
-					toggleClass(tableHeadData[sorting.indexOf(1)], "sorting-by", true);
-				} else if (sorting.indexOf(0) != -1){
-					toggleClass(tableHeadData[sorting.indexOf(0)], "sorting-by", true);
-				}
-				content.appendChild(tableHeader);
-				table.appendChild(dummyTableHeader);
-				if (typeof tableContainer == undefined) {
-					content.removeChild(tableContainer);
-				}
-				tableContainer = document.createElement('div');
-				tableContainer.appendChild(table);
-				toggleClass(tableContainer, "table-container", true);
-				content.appendChild(tableContainer);
-
-				// Makes action buttons
-				actionButtons.innerHTML = "";
-				for (var i = 0; i < actions.length; i++) {
-					var name = actions[i][0];
-					var attributes = actions[i][1];
-					var button = document.createElement('button');
-					button.innerHTML = name;
-					if (existsAndHas(attributes, "selection")) {
-						toggleClass(button, "selection", true);
-						button.disabled = true;
-						button.title = "Please select at least one entry";
-					}
-					if (existsAndHas(attributes, "disabled")) {
-						toggleClass(button, "disabled", true);
-						button.disabled = true;
-						button.title = "This action is currently unavailable";
-					}
-					button.addEventListener('click', actionFuctions[pageName][name]);
-					actionButtons.appendChild(button);
+					div.innerHTML = name;
+					td.innerHTML = name;
+					tableHeader.appendChild(div);
+					dummyTableHeader.appendChild(td);
 				}
 			}
+			tableHeadData = tableHeader.getElementsByTagName('div');
+			if (sorting.indexOf(1) != -1) {
+				toggleClass(tableHeadData[sorting.indexOf(1)], "sorting-by", true);
+			} else if (sorting.indexOf(0) != -1){
+				toggleClass(tableHeadData[sorting.indexOf(0)], "sorting-by", true);
+			}
+			content.appendChild(tableHeader);
+			table.appendChild(dummyTableHeader);
+			if (typeof tableContainer == undefined) {
+				content.removeChild(tableContainer);
+			}
+			tableContainer = document.createElement('div');
+			tableContainer.appendChild(table);
+			toggleClass(tableContainer, "table-container", true);
+			content.appendChild(tableContainer);
+
+			// Makes action buttons
+			actionButtons.innerHTML = "";
+			for (var i = 0; i < actions.length; i++) {
+				var name = actions[i][0];
+				var attributes = actions[i][1];
+				var button = document.createElement('button');
+				button.innerHTML = name;
+				if (existsAndHas(attributes, "selection")) {
+					toggleClass(button, "selection", true);
+					button.disabled = true;
+					button.title = "Please select at least one entry";
+				}
+				if (existsAndHas(attributes, "disabled")) {
+					toggleClass(button, "disabled", true);
+					button.disabled = true;
+					button.title = "This action is currently unavailable";
+				}
+				button.addEventListener('click', actionFunctions[pageName][name]);
+				actionButtons.appendChild(button);
+			}
+
 			// Makes table body
 			for (var i = 0; i < items.length; i++) {
 				var tr = document.createElement('tr');
@@ -296,13 +304,11 @@ function loadPage(pageName, getPageInfo, searchQuery, sortingBy, pageNumber, res
 						}
 						trows[j].insertBefore(clone, trows[j].firstChild);
 					}
-					if (getPageInfo) {
-						var div = document.createElement('div');
-						toggleClass(div, "checkcol", true);
-						div.appendChild(checkbox.cloneNode());
-						toggleClass(div, "unsortable", true);
-						tableHeader.insertBefore(div, tableHeader.firstChild);
-					}
+					var div = document.createElement('div');
+					toggleClass(div, "checkcol", true);
+					div.appendChild(checkbox.cloneNode());
+					toggleClass(div, "unsortable", true);
+					tableHeader.insertBefore(div, tableHeader.firstChild);
 					break;
 				}
 			}
@@ -451,24 +457,33 @@ function makeForm(title, desc, fields, buttons) {
 	var formFields = form.querySelector('.form-fields');
 	for (var i = 0; i < fields.length; i++) {
 		var tr = document.createElement('tr');
-		var fieldNameTD = document.createElement('td');
 		var fieldTD = document.createElement('td');
-		var fieldLabel = document.createElement('label');
-		var field = document.createElement('input');
-		var id = "formfield-" + fields[i][0].toLowerCase();
-		fieldLabel.setAttribute('for', id);
-		fieldLabel.innerHTML = fields[i][0];
-		field.id = id;
-		field.name = fields[i][0].toLowerCase();
+		var field = fields[i][3] ? document.createElement('textarea') : document.createElement('input');
+		if (fields[i][3]) {
+			field.name = fields[i][2].toLowerCase();
+			field.setAttribute("colspan", 2);
+			field.setAttribute("rows", 4);
+			if (fields.length == 1) {
+				field.style.width = "240px";
+			}
+		} else {
+			var fieldNameTD = document.createElement('td');
+			var fieldLabel = document.createElement('label');
+			var id = "formfield-" + fields[i][0].toLowerCase();
+			fieldLabel.setAttribute('for', id);
+			fieldLabel.innerHTML = fields[i][0];
+			field.id = id;
+			field.name = fields[i][0].toLowerCase();
+			fieldNameTD.appendChild(fieldLabel);
+			tr.appendChild(fieldNameTD);
+		}
 		if (fields[i][1] != undefined) {
 			field.value = fields[i][1];
 		}
 		if (fields[i][2] != undefined) {
 			field.setAttribute('placeholder', fields[i][2]);
 		}
-		fieldNameTD.appendChild(fieldLabel);
 		fieldTD.appendChild(field);
-		tr.appendChild(fieldNameTD);
 		tr.appendChild(fieldTD);
 		formFields.appendChild(tr);
 	}
@@ -481,11 +496,17 @@ function makeForm(title, desc, fields, buttons) {
 			body.page = page.name;
 			body.action = this.innerHTML;
 			body.form = {};
-			var inputs = form.getElementsByTagName('input');
+			var inputs = form.querySelectorAll('input, textarea');
 			for (var i = 0; i < inputs.length; i++) {
 				body.form[inputs[i].name] = inputs[i].value;
 			}
 			var req = xhr("/api/submitform", "POST", true, "", JSON.stringify(body));
+			req.onreadystatechange = function() {
+				if (req.readyState == 4 && req.status == 200) {
+					hideOverlay(overlay);
+					loadPage(page.name, page.searchQuery, page.sortingBy, page.pageNumber, page.resultsPerPage);
+				}
+			}
 		});
 		formButtons.appendChild(button);
 	}
