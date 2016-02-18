@@ -38,7 +38,9 @@ button::-moz-focus-inner {
 
 		/* Page menu */
 			#page-menu {
-
+				color: white;
+				line-height: 28px;
+				font-size: 18px;
 			}
 
 		/* User area */

@@ -1,0 +1,42 @@
+SQL
+    Customer
+        Users
+            User 1
+                Password
+                Custom Permissions (if any)
+            User 2
+                Password
+                Custom Permissions (if any)
+            etc
+        Pages
+            People
+                Properties
+                    Name
+                        Display as column (true/false)
+                        Sortable (true/false, can only be true if above is true)
+                    Role
+                        Display as column (true/false)
+                        Sortable (true/false, can only be true if above is true)
+                        Default permissions
+                    Address
+                        Display as column (true/false)
+                        Sortable (true/false, can only be true if above is true)
+                    etc
+                Items
+                    c659deb6 (unique item identifier)
+                        Name
+                        Role
+                        Address
+                        etc
+            Inventory
+                Properties
+                    Name
+                        Display as column (true/false)
+                        Sortable (true/false, can only be true if above is true)
+                    etc
+                Items
+                    244a2094 (unique item identifier)
+                        Name
+                        etc
+                    etc
+            etc

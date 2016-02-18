@@ -7,3 +7,9 @@ legal stuff bottom middle
 Page number
 Sort dynamically: locally if short, server if long
 Advanced search query button
+
+
+FOR TSA:
+Page menu
+Page numbers
+SQL database
