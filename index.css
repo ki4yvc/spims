@@ -29,7 +29,6 @@ button::-moz-focus-inner {
 			padding: 6px 48px;
 			width: 100vw;
 			height: 44px;
-			display: flex;
 			justify-content: space-between;
 			box-sizing: border-box;
 			background-color: \(themecolor);
@@ -38,12 +37,41 @@ button::-moz-focus-inner {
 
 		/* Page menu */
 			#page-menu {
+				position: fixed;
+				left: 0px;
+				top: 0px;
+				width: 220px;
+				height: 100vh;
+				transform: translate(-100%);
+				background-color: rgba(255, 255, 255, 0.9);
+				box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
+				transition: 0.5s;
+			}
+
+			#page-menu.open {
+				transform: none;
+			}
+
+			#page-menu-button {
+				position: absolute;
+				left: calc(100% + 24px);
+				top: 6px;
+				margin: 0px;
+				padding: 0px;
 				color: white;
+				background: none;
+				border: none;
+				cursor: pointer;
 				line-height: 28px;
 				font-size: 18px;
+				white-space: nowrap;
 			}
 
 		/* User area */
+			#user-area {
+				float: right;
+			}
+
 			#user-area > div {
 				vertical-align: top;
 			}

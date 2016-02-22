@@ -109,7 +109,9 @@ function getPages() {
 }
 
 function setUpBefore() {
-	notificationMenu = document.getElementById('notification-menu')
+	notificationMenu = document.getElementById('notification-menu');
+	pageMenu = document.getElementById('page-menu');
+	pageMenuButton = document.getElementById('page-menu-button');
 	accountMenu = document.getElementById('account-menu');
 	currentUser = document.getElementById('current-user');
 	logOutButton = document.getElementById('log-out-button');
@@ -119,6 +121,9 @@ function setUpBefore() {
 
 	notificationMenu.addEventListener('click', function() {
 		toggleClass(notificationMenu, 'selected');
+	});
+	pageMenuButton.addEventListener('click', function() {
+		toggleClass(pageMenu, "open");
 	});
 	currentUser.addEventListener('click', function() {
 		toggleClass(accountMenu, 'selected');
