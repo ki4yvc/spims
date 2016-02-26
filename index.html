@@ -11,10 +11,17 @@
     <div id="header" class="no-select">
 		<div id="top-bar">
 			<div id="page-menu">
-				<button id="page-menu-button" class="fa fa-bars"></button>
-				<h2>Menu</h2>
-				<hr>
-				<ul id="page-list"></ul>
+				<button id="page-menu-button">
+					<svg width="16" height="14">
+					    <line class="bar1" x1="2" y1="2" x2="14" y2="2" stroke="white" stroke-width="2" stroke-linecap="round"/>
+					    <line class="bar2" x1="2" y1="7" x2="14" y2="7" stroke="white" stroke-width="2" stroke-linecap="round"/>
+					    <line class="bar3" x1="2" y1="12" x2="14" y2="12" stroke="white" stroke-width="2" stroke-linecap="round"/>
+					</svg>
+				</button>
+				<div id="page-menu-content">
+					<h2>Menu</h2>
+					<ul id="page-list"></ul>
+				</div>
 			</div>
 			<div id="user-area">
 				<div id="notification-menu" class="menu-button"><span class="fa fa-bell"></span></div>

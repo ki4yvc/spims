@@ -124,6 +124,19 @@ function setUpBefore() {
 	});
 	pageMenuButton.addEventListener('click', function() {
 		toggleClass(pageMenu, "open");
+		var bar1 = pageMenuButton.querySelector(".bar1");
+		var bar2 = pageMenuButton.querySelector(".bar2");
+		var bar3 = pageMenuButton.querySelector(".bar3");
+		var pageMenuIsOpen = pageMenu.className.indexOf("open") > -1;
+		if (pageMenuIsOpen) {
+			bar1.setAttribute("x1", "2.5")
+			bar1.setAttribute("x2", "11.5")
+			bar1.setAttribute("y2", "12")
+			bar2.style.opacity = "0"
+			bar3.setAttribute("x1", "2.5")
+			bar3.setAttribute("x2", "11.5")
+			bar3.setAttribute("y2", "2")
+		}
 	});
 	currentUser.addEventListener('click', function() {
 		toggleClass(accountMenu, 'selected');
