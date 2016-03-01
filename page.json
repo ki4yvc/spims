@@ -6,7 +6,7 @@
 			["Alert", ["selection"]]
 		],
 		[
-			["Name", true, ["sortingby"]],
+			["Name", true, ["sortingby", ["lfm-name"]]],
 			["Radio ID", true, []],
 			["Role", true, []],
 			["Address", true, ["unsortable"]],
@@ -23,7 +23,7 @@
 				"Admin",
 				"1600 Pennsylvania Ave NW, Washington, DC 20500",
 				"(202) 456-1111",
-				"greene.adam.d@gmail.com"
+				"adam@turaco.io"
 			],
 			[
 				"dc7083b7",
@@ -32,7 +32,7 @@
 				"Secretary",
 				"14 East 51st Street, New York, NY 10022",
 				"(212) 753-2261",
-				"kevinmgagnon@icloud.com"
+				"kevin@turaco.io"
 			],
 			[
 				"244a2094",
@@ -42,8 +42,260 @@
 				"1400 Old Tamah Road, Irmo, SC 29063",
 				"(803) 476-3300",
 				"blindler@lexrich5.org"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
+			],
+			[
+				"dc7083b7",
+				"Gagnon, Kevin, M",
+				"1625",
+				"Secretary",
+				"14 East 51st Street, New York, NY 10022",
+				"(212) 753-2261",
+				"kevin@turaco.io"
 			]
 		],
-		3
+		31
 	]
 }

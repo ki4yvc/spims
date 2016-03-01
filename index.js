@@ -221,6 +221,8 @@ function loadPage(pageName, searchQuery, sortingBy, pageNumber, resultsPerPage) 
 			page.pageNumber = pageNumber;
 			page.resultsPerPage = resultsPerPage;
 
+			content.innerHTML = "";
+
 			table = document.createElement('table');
 
 			// Makes table head
@@ -295,7 +297,7 @@ function loadPage(pageName, searchQuery, sortingBy, pageNumber, resultsPerPage) 
 			for (var i = 0; i < items.length; i++) {
 				var tr = document.createElement('tr');
 				for (var j = 0; j < properties.length; j++) {
-					if (properties[i][1]) {
+					if (properties[j][1]) {
 						var td = document.createElement('td');
 						td.innerHTML = items[i][j + 1];
 						tr.appendChild(td);
@@ -348,9 +350,10 @@ function loadPage(pageName, searchQuery, sortingBy, pageNumber, resultsPerPage) 
 			pageNumberContainer.appendChild(nextButton);
 			content.appendChild(pageNumberContainer);
 
-			hideOverlay(overlay);
 			setUpAfter();
 			resizeTable();
+		} else {
+
 		}
 	}
 }
