@@ -548,7 +548,7 @@ function makeForm(title, desc, fields, buttons) {
 	form.style.top = top + "px";
 	form.style.left = left + "px";
 	function dragForm(e) {
-		form.style.top = e.clientX=Y + "px";
+		form.style.top = e.clientY + "px";
 		form.style.left = e.clientX + "px";
 	}
 	form.addEventListener('drag', dragForm);
