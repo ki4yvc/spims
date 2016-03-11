@@ -129,13 +129,17 @@ function setUpBefore() {
 		var bar3 = pageMenuButton.querySelector(".bar3");
 		var pageMenuIsOpen = pageMenu.className.indexOf("open") > -1;
 		if (pageMenuIsOpen) {
-			bar1.setAttribute("x1", "2.5")
-			bar1.setAttribute("x2", "11.5")
-			bar1.setAttribute("y2", "12")
+			bar1.setAttribute("y1", "2")
+			bar1.setAttribute("y2", "14")
 			bar2.style.opacity = "0"
-			bar3.setAttribute("x1", "2.5")
-			bar3.setAttribute("x2", "11.5")
+			bar3.setAttribute("y1", "14")
 			bar3.setAttribute("y2", "2")
+		} else {
+			bar1.setAttribute("y1", "3")
+			bar1.setAttribute("y2", "3")
+			bar2.style.opacity = ""
+			bar3.setAttribute("y1", "13")
+			bar3.setAttribute("y2", "13")
 		}
 	});
 	currentUser.addEventListener('click', function() {
