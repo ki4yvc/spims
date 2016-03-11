@@ -547,4 +547,8 @@ function makeForm(title, desc, fields, buttons) {
 	var left = (window.innerWidth * 0.5 - form.clientWidth * 0.5) | 0;
 	form.style.top = top + "px";
 	form.style.left = left + "px";
+	form.addEventListener('drag', function(e) {
+		form.style.top = e.clientY;
+		form.style.left = e.clientX;
+	});
 }
