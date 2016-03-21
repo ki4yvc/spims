@@ -1,4 +1,4 @@
-#!python
+#!/usr/bin/python3
 import api
 
 reqData = api.getRequestData()
