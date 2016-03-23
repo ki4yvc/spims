@@ -14,10 +14,7 @@ conn = pymysql.connect(
     host='localhost')
 try:
     with connection.cursor() as cursor:
-        # Create a new record
-        cursor.execute(USE spims)
-        sql = "INSERT INTO `people` (`created`, `firstName`, `lastName`, `radioID`, `position`, `address`, `city`, `state`, `zip`, `phone`, `email`)"
-        cursor.execute(sql VALUES (NOW(), 'Nick', 'Gustafson', '1234', 'Hitler', '001 Hollywood Rd', 'Columbia', 'SC', 29212, '8033157023', 'nichgus7@gmail.com'))
+        cursor.execute(INSERT INTO `people` (`created`, `firstName`, `lastName`, `radioID`, `position`, `address`, `city`, `state`, `zip`, `phone`, `email`) VALUES (NOW(), 'Nick', 'Gustafson', '1234', 'Hitler', '001 Hollywood Rd', 'Columbia', 'SC', 29212, '8033157023', 'nichgus7@gmail.com'))
         connection.commit()
 finally:
     connection.close()
