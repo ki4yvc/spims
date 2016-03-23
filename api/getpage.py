@@ -12,7 +12,15 @@ conn = pymysql.connect(
     user='root',
     passwd='spimsMySQL2015',
     host='localhost')
-c = conn.cursor()
+try:
+    with connection.cursor() as cursor:
+        # Create a new record
+        sql = "INSERT INTO `people` (`firstName`, `lastName`, `radioID`, `position`, `address`, `city`, `state`, `zip`, `phone`, `email`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(sql, ('Nick', 'Gustafson', '1234', 'Hitler', '001 Hollywood Rd', 'Columbia', 'SC', 29212, '8033157023', 'nichgus7@gmail.com'))
+
+    connection.commit()
+finally:
+    connection.close()
 
 
 # This would be done dynamically using the qstr and SQL database
