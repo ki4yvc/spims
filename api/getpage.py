@@ -15,7 +15,7 @@ conn = pymysql.connect(
 try:
     with connection.cursor() as cursor:
         # Create a new record
-        sql = "INSERT INTO `people` (`created`, `firstName`, `lastName`, `radioID`, `position`, `address`, `city`, `state`, `zip`, `phone`, `email`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        sql = "INSERT INTO `people` (`created`, `firstName`, `lastName`, `radioID`, `position`, `address`, `city`, `state`, `zip`, `phone`, `email`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         cursor.execute(sql, (NOW(), 'Nick', 'Gustafson', '1234', 'Hitler', '001 Hollywood Rd', 'Columbia', 'SC', 29212, '8033157023', 'nichgus7@gmail.com'))
 
     connection.commit()
