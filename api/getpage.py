@@ -18,7 +18,6 @@ def add(db, fN, lN, rID, p, a, c, s, z, ph, e):
         with conn.cursor() as cursor:
             cursor.execute("INSERT INTO"+db+"(`created`, `firstName`, `lastName`, `radioID`, `position`, `address`, `city`, `state`, `zip`, `phone`, `email`) VALUES (NOW(),"+fN+","+lN+","+rID+","+p+","+a+","+c+","+s+","+z+","+ph+","+e+")")
             conn.commit()
-        finally:
             conn.close()
 
 #Taking out from the server (concret)
