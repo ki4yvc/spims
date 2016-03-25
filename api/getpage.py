@@ -13,27 +13,27 @@ conn = pymysql.connect(
     passwd='spimsMySQL2015',
     host='localhost')
 #Putting into the server (concret)
-def add(db, fN, lN, rID, p, a, c, s, z, ph, e):
+def add(dbase, fN, lN, rID, p, a, c, s, z, ph, e):
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO"+db+"(`created`, `firstName`, `lastName`, `radioID`, `position`, `address`, `city`, `state`, `zip`, `phone`, `email`) VALUES (NOW(),"+fN+","+lN+","+rID+","+p+","+a+","+c+","+s+","+z+","+ph+","+e+")")
+    cursor.execute("INSERT INTO"+dbase+"(`created`, `firstName`, `lastName`, `radioID`, `position`, `address`, `city`, `state`, `zip`, `phone`, `email`) VALUES (NOW(),"+fN+","+lN+","+rID+","+p+","+a+","+c+","+s+","+z+","+ph+","+e+")")
     conn.commit()
     conn.close()
 
 #Taking out from the server (concret)
-def get(db):
+def get(dbase):
     cursor = con.cursor()
-    return cursor.execute("SELECT * FROM"+db)
+    return cursor.execute("SELECT * FROM"+dbase)
     conn.close()
 
-def delete(db, column, value):
+def delete(dbase, column, value):
     cursor = con.cursor()
-    cursor.execute("DELETE FROM "+db+" WHERE "+column+" IS "+value)
+    cursor.execute("DELETE FROM "+dbase+" WHERE "+column+" IS "+value)
     conn.commit()
     conn.close()
 
-def addColumn(db, newName, dataType):
+def addColumn(dbase, newName, dataType):
     cursor = con.cursor()
-    cursor.execute("ALTER TABLE "+db+" ADD COLUMN "+newName+" "+dataType)
+    cursor.execute("ALTER TABLE "+dbase+" ADD COLUMN "+newName+" "+dataType)
     conn.commit()
     conn.close()
 
