@@ -5,38 +5,41 @@ reqData = api.getRequestData()
 qstr = reqData["qstr"]
 api.printHeaders(None, "json", True)
 
-# Connect to the database.
 import pymysql
-conn = pymysql.connect(
-    db='spims',
-    user='root',
-    passwd='spimsMySQL2015',
-    host='localhost')
-#Putting into the server (concret)
-def add(dbase, fN, lN, rID, p, a, c, s, z, ph, e):
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO"+dbase+"(`created`, `firstName`, `lastName`, `radioID`, `position`, `address`, `city`, `state`, `zip`, `phone`, `email`) VALUES (NOW(),"+fN+","+lN+","+rID+","+p+","+a+","+c+","+s+","+z+","+ph+","+e+")")
-    conn.commit()
-    conn.close()
-
-#Taking out from the server (concret)
-def get(dbase):
-    cursor = con.cursor()
-    return cursor.execute("SELECT * FROM"+dbase)
-    conn.close()
-
-def delete(dbase, column, value):
-    cursor = con.cursor()
-    cursor.execute("DELETE FROM "+dbase+" WHERE "+column+" IS "+value)
-    conn.commit()
-    conn.close()
 
 def addColumn(dbase, newName, dataType):
-    cursor = con.cursor()
-    cursor.execute("ALTER TABLE "+dbase+" ADD COLUMN "+newName+" "+dataType)
+    cursor.execute("ALTER TABLE %s ADD COLUMN %s %s" % (str(dbase), str(newName), str(dataType)))
     conn.commit()
-    conn.close()
 
+def insert(dbase, fN, lN, rID, p, a, c, s, z, ph, e):
+    cursor.execute('INSERT INTO %s (`created`, `firstName`, `lastName`, `radioID`, `position`, `address`, `city`, `state`, `zip`, `phone`, `email`) values (NOW(),%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)' % (str(dbase), str(fN), str(lN), str(rID), str(p), str(a), str(c), str(s), str(z), str(ph), str(e)))
+    conn.commit()
+
+def retrieve(dbase, rID):
+    cursor.execute('SELECT * from %s where radioID = %s' % (str(dbase), str(rID)))
+    return cursor.fethmany(size=1)
+
+def update(dbase, variable, value, rID):
+    cursor.execute('UPDATE %s set %s = %s where `radioID` = %s' % (str(dbase), str(variable), str(value), str(rID)))
+    conn.commit()
+
+def updateRadioID(dbase, rID, a):
+    cursor.execute('UPDATE %s set `radioID` = %s where `address` = %s' % (str(dbase), str(rID), str(a)))
+    conn.commit()
+
+def delete(dbase, rID):
+    cursor.execute('DELETE from %s where `radioID` = %s' % (str(dbase), str(rID)))
+    conn.commit()
+
+def main():
+    conn = pymysql.connect(
+        db='spims',
+        user='root',
+        passwd='spimsMySQL2015',
+        host='localhost')
+    cursor = conn.cursor()
+    
+conn.close()
 
 with open("../page.json") as rsrc:
 	content = rsrc.read()
