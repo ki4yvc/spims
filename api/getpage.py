@@ -7,6 +7,13 @@ api.printHeaders(None, "json", True)
 
 import pymysql
 
+conn = pymysql.connect(
+    db='spims',
+    user='root',
+    passwd='spimsMySQL2015',
+    host='localhost')
+cursor = conn.cursor()
+
 def addColumn(dbase, newName, dataType):
     cursor.execute("ALTER TABLE %s ADD COLUMN %s %s" % (str(dbase), str(newName), str(dataType)))
     conn.commit()
@@ -30,14 +37,6 @@ def updateRadioID(dbase, rID, a):
 def delete(dbase, rID):
     cursor.execute('DELETE from %s where `radioID` = %s' % (str(dbase), str(rID)))
     conn.commit()
-
-def main():
-    conn = pymysql.connect(
-        db='spims',
-        user='root',
-        passwd='spimsMySQL2015',
-        host='localhost')
-    cursor = conn.cursor()
     
 conn.close()
 
