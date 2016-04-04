@@ -14,7 +14,7 @@ SQL
                     Name
                         Display as column (true/false)
                         Sortable (true/false, can only be true if above is true)
-                    Role
+                    Position
                         Display as column (true/false)
                         Sortable (true/false, can only be true if above is true)
                         Default permissions

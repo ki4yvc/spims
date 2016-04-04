@@ -8,7 +8,7 @@
 		[
 			["Name", true, ["sortingby", ["lfm-name"]]],
 			["Radio ID", true, []],
-			["Role", true, []],
+			["Position", true, []],
 			["Address", true, ["unsortable"]],
 			["Phone", true, []],
 			["Email", true, []]
@@ -17,7 +17,7 @@
 	"data": [
 		[
 			[
-				"c659deb6",
+				"0",
 				"Greene, Adam, D",
 				"1624",
 				"Admin",
@@ -26,7 +26,7 @@
 				"adam@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"1",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -35,7 +35,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"244a2094",
+				"2",
 				"Lindler, Barry, P",
 				"7975",
 				"Captain",
@@ -44,7 +44,7 @@
 				"blindler@lexrich5.org"
 			],
 			[
-				"dc7083b7",
+				"3",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -53,7 +53,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -62,7 +62,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -71,7 +71,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -80,7 +80,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -89,7 +89,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -98,7 +98,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -107,7 +107,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -116,7 +116,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -125,7 +125,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -134,7 +134,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -143,7 +143,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -152,7 +152,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -161,7 +161,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -170,7 +170,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -179,7 +179,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -188,7 +188,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -197,7 +197,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -206,7 +206,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -215,7 +215,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -224,7 +224,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -233,7 +233,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -242,7 +242,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -251,7 +251,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -260,7 +260,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -269,7 +269,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -278,7 +278,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
@@ -287,7 +287,7 @@
 				"kevin@turaco.io"
 			],
 			[
-				"dc7083b7",
+				"4",
 				"Gagnon, Kevin, M",
 				"1625",
 				"Secretary",
