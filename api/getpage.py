@@ -18,8 +18,8 @@ def addColumn(dbase, newName, dataType):
     cursor.execute("ALTER TABLE %s ADD COLUMN %s %s" % (str(dbase), str(newName), str(dataType)))
     conn.commit()
 
-def insert(dbase, fN, lN, rID, p, a, c, s, z, ph, e):
-    cursor.execute('INSERT INTO %s (`created`, `firstName`, `lastName`, `radioID`, `position`, `address`, `city`, `state`, `zip`, `phone`, `email`) values (NOW(),%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)' % (str(dbase), str(fN), str(lN), str(rID), str(p), str(a), str(c), str(s), str(z), str(ph), str(e)))
+def insert(dbase, n, rID, p, a, ph, e):
+    cursor.execute('INSERT INTO %s (`created`, `name`, `radioID`, `position`, `address`, `phone`, `email`) values (NOW(),%s,%s,%s,%s,%s,%s)' % (str(dbase), str(n), str(rID), str(p), str(a), str(ph), str(e)))
     conn.commit()
 
 def retrieve(dbase, rID):
@@ -37,7 +37,7 @@ def updateRadioID(dbase, rID, a):
 def delete(dbase, rID):
     cursor.execute('DELETE from %s where `radioID` = %s' % (str(dbase), str(rID)))
     conn.commit()
-    
+
 conn.close()
 
 with open("../page.json") as rsrc:
