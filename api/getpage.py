@@ -14,7 +14,8 @@ conn = pymysql.connect(
     host='localhost')
 cursor = conn.cursor()
 
-
+items = cursor.execute('SELECT * FROM `spims` ORDER BY `name` ASC LIMIT 0, 40')
+items = items.items()
 
 conn.close()
 
