@@ -15,10 +15,10 @@ conn = pymysql.connect(
 cursor = conn.cursor()
 
 cursor.execute('SELECT * FROM `whitmire_people` ORDER BY `name` ASC LIMIT 0, 40')
-print(cursor.fetchall())
+peopletup = cursor.fetchall()
 
 conn.close()
 
-# with open("../page.json") as rsrc:
-# 	content = rsrc.read()
-# print(content, end="")
+with open("../page.json") as rsrc:
+	content = rsrc.read()
+print(content, end="")
