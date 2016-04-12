@@ -14,11 +14,11 @@ conn = pymysql.connect(
     host='localhost')
 cursor = conn.cursor()
 
-items = cursor.execute('SELECT * FROM `whitmire_people` ORDER BY `name` ASC LIMIT 0, 40')
-items = items.items()
+cursor.execute('SELECT * FROM `whitmire_people` ORDER BY `name` ASC LIMIT 0, 40')
+print(cursor.fetchall())
 
 conn.close()
 
-with open("../page.json") as rsrc:
-	content = rsrc.read()
-print(content, end="")
+# with open("../page.json") as rsrc:
+# 	content = rsrc.read()
+# print(content, end="")
