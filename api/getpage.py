@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 import api
 
-# reqData = api.getRequestData()
-# qstr = reqData["qstr"]
+reqData = api.getRequestData()
+qstr = reqData["qstr"]
 api.printHeaders(None, "json", True)
 
 import pymysql
@@ -11,11 +11,11 @@ conn = pymysql.connect(
     db='spims',
     user='root',
     passwd='spimsMySQL2015',
-    host='104.196.21.15')
+    host='localhost')
 cursor = conn.cursor()
 
-items = cursor.execute('SELECT * FROM `whitmire_people` ORDER BY `name` ASC LIMIT 0, 40')
-items = items.items()
+# items = cursor.execute('SELECT * FROM `whitmire_people` ORDER BY `name` ASC LIMIT 0, 40')
+# items = items.items()
 
 conn.close()
 
